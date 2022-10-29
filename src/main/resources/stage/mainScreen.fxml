@@ -28,7 +28,7 @@
                   </FlowPane>
                   <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" prefWrapLength="100.0">
                      <children>
-                        <Button fx:id="openBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" style="-fx-cursor: auto; -fx-background-radius: 50%; -fx-pref-width: 50; -fx-pref-height: 50;" text="+" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                        <Button fx:id="openBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#openFile" style="-fx-cursor: auto; -fx-background-radius: 50%; -fx-pref-width: 50; -fx-pref-height: 50;" text="+" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                            <font>
                               <Font size="24.0" />
                            </font></Button>
@@ -42,7 +42,14 @@
                <children>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="266.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
                     <content>
-                        <ListView fx:id="listView" fixedCellSize="55.0" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="260.0">                      
+                        <ListView fx:id="listView" fixedCellSize="55.0" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="260.0" stylesheets="@../css/styles.css">                      
+                            <placeholder>
+                                <Label text="Llista buida. Comença per carregar una cançó." textFill="RED">
+                                    <font>
+                                       <Font size="18.0" />
+                                    </font>
+                                </Label>
+                            </placeholder>
                         </ListView>
                     </content>
                      <BorderPane.margin>
@@ -55,11 +62,11 @@
          <bottom>
             <HBox alignment="CENTER" prefHeight="110.0" BorderPane.alignment="CENTER">
                <children>
-                <Button fx:id="playBtn" mnemonicParsing="false" text="Play" />
+                <Button fx:id="playBtn" mnemonicParsing="false" onAction="#playSong" text="Play" />
                   <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" HBox.hgrow="NEVER" />
-                <Button mnemonicParsing="false" text="Pause" />
+                <Button fx:id="pauseBtn" mnemonicParsing="false" onAction="#pauseSong" text="Pause" />
                   <Separator disable="true" layoutX="269.0" layoutY="10.0" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                <Button fx:id="stopBtn" mnemonicParsing="false" text="Stop" />
+                <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopSong" text="Stop" />
                   <Separator disable="true" layoutX="338.0" layoutY="10.0" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
                 <Slider />
                </children>
