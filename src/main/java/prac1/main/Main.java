@@ -6,7 +6,7 @@ package prac1.main;
 
 /**
  *
- * @author manel
+ * @author GrupD
  */
 public class Main {
 

@@ -15,20 +15,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import prac1.main.Song;
 
 /**
  * FXML Controller class
  *
- * @author manel
+ * @author GrupD
  */
 public class MainScreenController implements Initializable {
     
     private FileChooser fileChooser = new FileChooser();
     private String path;
+    private Song song = null;
     private final long MAX_FILE_SIZE = (20480L * 1024L);                        // 20.971.520 Bytes = 20MB 
      
     /***
@@ -65,22 +64,20 @@ public class MainScreenController implements Initializable {
             extension = new FileChooser.ExtensionFilter("MP3-File", "*.mp3");   // Filtre: Limitar tipus d'arxiu a MP3
             fileChooser.getExtensionFilters().add(extension);
 
-            File song = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
-            path = song.toURI().toString();
-            int extensio = song.getName().indexOf(".");
-            String name = song.getName().substring(0, extensio);
+            File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
+            path = file.toURI().toString();
+            song = new Song(file);                                              // Crear nou objecte de tipus cançó
         
-            if ( song.exists() ) {                                              // Si s'ha obert un arxiu prèviament...
-                fileChooser.setInitialDirectory(song.getParentFile());          // ...recorda/obre l'últim directori visitat
+            if ( file.exists() ) {                                              // Si s'ha obert un arxiu prèviament...
+                fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
             }
         
             if ( path != null ) {                                               // Si hi ha fitxer, llistar-lo
                 
-                long fileSize = song.length();
+                long fileSize = file.length();
                 if ( fileSize <= MAX_FILE_SIZE ) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
-                    
-                    // elements.add(name + " " + getDuration(song));
-                    elements.add(name);
+                   
+                    elements.add(song.getTitle() +" - "+ song.getDuration());
                     listView.setItems(elements);
                     
                 } else {
@@ -110,21 +107,7 @@ public class MainScreenController implements Initializable {
             
         }
         
-    }
-    
-    // PENDENT...
-    private static float getDuration(File file) throws Exception {
-        
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-        AudioFormat format = audioInputStream.getFormat();
-        System.out.println("Format: " + format);
-        long audioFileLength = file.length();
-        int frameSize = format.getFrameSize();
-        float frameRate = format.getFrameRate();
-        float durationInSeconds = (audioFileLength / (frameSize * frameRate));
-        return (durationInSeconds);
-    }
-    
+    }    
     
     @FXML
     private Button playBtn;
