@@ -4,6 +4,7 @@
  */
 package prac1.main;
 
+import prac1.exceptions.noDurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -13,7 +14,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  *
- * @author mllanas
+ * @author GrupD
+ * @author Txell Llanas
  */
 public class Song {
 
@@ -25,32 +27,38 @@ public class Song {
     public Song(File file) {
         this.file = file;
     }
-
+  
     public String getTitle() {
         int extensio = file.getName().indexOf(".");
         title = file.getName().substring(0, extensio);
         return title;
     }
 
-    public String getDuration() throws UnsupportedAudioFileException, IOException {
+    public String getDuration() throws UnsupportedAudioFileException, IOException, noDurationException {
 
-        fileFormat = AudioSystem.getAudioFileFormat(file);
-        System.out.println("format: " + fileFormat);
+            fileFormat = AudioSystem.getAudioFileFormat(file);
+            System.out.println("format: " + fileFormat);
         
-        if (fileFormat instanceof AudioFileFormat) {
-            Map<?, ?> properties = ((AudioFileFormat) fileFormat).properties();
-            String key = "duration";
-            Long microseconds = (Long) properties.get(key);
-            int mili = (int) (microseconds / 1000);
-            int sec = (mili / 1000) % 60;
-            int min = (mili / 1000) / 60;
-            duration = min + ":" + sec;
-            
-        } else {
-            throw new UnsupportedAudioFileException();
-        }
+            if (fileFormat instanceof AudioFileFormat) {
+                Map<?, ?> properties = ((AudioFileFormat) fileFormat).properties();
+                String key = "duration";
+                Long microseconds = (Long) properties.get(key);
+                int mili = (int) (microseconds / 1000);
+                int sec = (mili / 1000) % 60;
+                int min = (mili / 1000) / 60;
+                System.out.println("duracio: " + sec +":"+ min);
+
+                if (sec == 0 && min == 0) {
+                    throw new noDurationException("La duració de l'arxiu d'àudio"
+                                              + " ha de ser superior a 00:00.");
+                }
+
+                duration = String.format("%02d:%02d", min, sec);
+
+            } else {
+                throw new UnsupportedAudioFileException();
+            }
         
         return duration;
     }
-
 }

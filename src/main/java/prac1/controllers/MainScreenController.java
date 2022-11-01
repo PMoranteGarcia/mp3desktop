@@ -16,12 +16,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import prac1.exceptions.noDurationException;
 import prac1.main.Song;
 
 /**
  * FXML Controller class
  *
  * @author GrupD
+ * @author Txell Llanas
  */
 public class MainScreenController implements Initializable {
     
@@ -41,7 +43,6 @@ public class MainScreenController implements Initializable {
         
     }
     
-    /** RF01 **/
     @FXML
     private Button openBtn;
     @FXML
@@ -50,13 +51,13 @@ public class MainScreenController implements Initializable {
     private ObservableList<String> elements = FXCollections.observableArrayList();
 
     /**
-     * *
-     * Obre un 'Dialog' per seleccionar un arxiu dins el Sistema Operatiu i 
-     * el llista dins un 'listView'. (PUNTS: 0,4)
+     * (RF01): Obre un 'Dialog' per seleccionar un arxiu *.mp3 dins el Sistema 
+     * Operatiu i el llista dins un 'listView'.
      *
+     * @author Txell Llanas
      */
     @FXML
-    private void openFile() throws UnsupportedAudioFileException {
+    private void openFile() throws UnsupportedAudioFileException, noDurationException {
 
         try {
             
@@ -77,8 +78,12 @@ public class MainScreenController implements Initializable {
                 long fileSize = file.length();
                 if ( fileSize <= MAX_FILE_SIZE ) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
                    
-                    elements.add(song.getTitle() +" - "+ song.getDuration());
-                    listView.setItems(elements);
+                    if ( !song.getDuration().equals("null") ) {
+                        elements.add(song.getTitle() +" - "+ song.getDuration());
+                        listView.setItems(elements);
+                    } else {
+                        throw new noDurationException("");
+                    }
                     
                 } else {
                     throw new RuntimeException("Arxiu massa gran");             // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
@@ -99,7 +104,14 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís");
             alert.setContentText("El tamany de l'arxiu excedeix del límit (20MB).");
             alert.show();
-            System.out.println("CANCEL");
+            System.out.println("Tamany superior a 20MB");
+            
+        } catch (noDurationException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Avís");
+            alert.setContentText("Cançó sense duració: " + e.getLocalizedMessage());
+            alert.show();
+            System.out.println("Cançó sense duració");
             
         } catch (Exception e) {
             
@@ -114,7 +126,7 @@ public class MainScreenController implements Initializable {
     
     @FXML
     private void playSong(){
-        openBtn.setDisable(true);
+        openBtn.setDisable(true);                                               // Deshabilita el botó d'afegir cançons
         
     }
     
@@ -123,7 +135,7 @@ public class MainScreenController implements Initializable {
     
     @FXML
     private void pauseSong(){
-        openBtn.setDisable(false);
+        openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
         
     }
     
@@ -132,7 +144,7 @@ public class MainScreenController implements Initializable {
      
     @FXML
     private void stopSong(){
-        openBtn.setDisable(false);
+        openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
         
     }   
     
