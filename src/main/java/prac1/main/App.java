@@ -23,7 +23,7 @@ public class App extends Application {
         
         try {
             
-            String fxml = "stage/mainScreen";
+            String fxml = "views/mainScreen";
 
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource(fxml + ".fxml"));
 
@@ -42,15 +42,6 @@ public class App extends Application {
              System.out.println("No s'ha pogut carregar la interfície d'Usuari.");
              System.out.println(ex.toString());
         }
-    }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
     }
     
     public static void starter(String[] args) {

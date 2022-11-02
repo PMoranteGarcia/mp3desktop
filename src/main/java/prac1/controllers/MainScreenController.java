@@ -13,11 +13,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import prac1.exceptions.noDurationException;
-import prac1.main.Song;
+import prac1.exceptions.NoDurationException;
+import prac1.Model.Song;
+import prac1.main.SongListViewCell;
 
 /**
  * FXML Controller class
@@ -27,29 +32,20 @@ import prac1.main.Song;
  */
 public class MainScreenController implements Initializable {
     
-    private FileChooser fileChooser = new FileChooser();
-    private String path;
+    private final FileChooser fileChooser = new FileChooser();
     private Song song = null;
     private final long MAX_FILE_SIZE = (20480L * 1024L);                        // 20.971.520 Bytes = 20MB 
-     
-    /***
-     * Inicialitza el controlador
-     * 
-     * @param url
-     * @param rb 
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-    }
     
     @FXML
     private Button openBtn;
-    @FXML
-    private ListView<String> listView;
-    @FXML
-    private ObservableList<String> elements = FXCollections.observableArrayList();
+    Tooltip tooltip = new Tooltip("Carregar cançó");
 
+    @FXML
+    private ListView<Song> listView;
+    
+    private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
+    
+    
     /**
      * (RF01): Obre un 'Dialog' per seleccionar un arxiu *.mp3 dins el Sistema 
      * Operatiu i el llista dins un 'listView'.
@@ -57,8 +53,8 @@ public class MainScreenController implements Initializable {
      * @author Txell Llanas
      */
     @FXML
-    private void openFile() throws UnsupportedAudioFileException, noDurationException {
-
+    private void openFile() throws UnsupportedAudioFileException, NoDurationException {
+        
         try {
             
             FileChooser.ExtensionFilter extension;
@@ -66,28 +62,32 @@ public class MainScreenController implements Initializable {
             fileChooser.getExtensionFilters().add(extension);
 
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
-            path = file.toURI().toString();
             song = new Song(file);                                              // Crear nou objecte de tipus cançó
-        
+                   
             if ( file.exists() ) {                                              // Si s'ha obert un arxiu prèviament...
-                fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
-            }
-        
-            if ( path != null ) {                                               // Si hi ha fitxer, llistar-lo
                 
-                long fileSize = file.length();
+                fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
+        
+                // Genero un índex per a cada element a llistar
+                String index = String.format( "%02d", listView.getItems().size() + 1 );
+                song.setIndex(index);
+                
+                long fileSize = file.length();                
                 if ( fileSize <= MAX_FILE_SIZE ) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
                    
-                    if ( !song.getDuration().equals("null") ) {
-                        elements.add(song.getTitle() +" - "+ song.getDuration());
-                        listView.setItems(elements);
+                    if ( !song.getDuration().equals("null") ) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
+                        
+                        songObservableList.add(song);                        
+                        listView.setItems(songObservableList);                     
+                        
                     } else {
-                        throw new noDurationException("");
+                        throw new NoDurationException("");
                     }
                     
                 } else {
                     throw new RuntimeException("Arxiu massa gran");             // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
                 }
+                
             }
             
         } catch ( NullPointerException e ) {                                    // Mostra un AVÍS si no se selecciona cap fitxer
@@ -106,7 +106,7 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("Tamany superior a 20MB");
             
-        } catch (noDurationException e) {
+        } catch (NoDurationException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Avís");
             alert.setContentText("Cançó sense duració: " + e.getLocalizedMessage());
@@ -117,9 +117,35 @@ public class MainScreenController implements Initializable {
             
             System.out.println(e.getMessage());
             
-        }
+        }  
+              
+    }
+
+    /***
+     * Inicialitza el controlador
+     * 
+     * @param url The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param rb The resources used to localize the root object, or null if the root object was not localized.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         
-    }    
+        openBtn.setTooltip(tooltip);
+        
+        Label placeholder = new Label("Afegeix una cançó.");                    // Especifico un texte d'ajuda per quan el llistat està buit
+        listView.setPlaceholder(placeholder);        
+        
+        listView.setItems(songObservableList);                                  // Actualitzo el llistat amb els elements disponibles (openFile())      
+        //lambda:  listView.setCellFactory(songListView -> new SongListViewCell());        
+        listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {// Carrego un layout a cada fila del llistat, on carregar-hi les dades de la cançó afegida
+            @Override
+            public ListCell<Song> call(ListView<Song> songListView) {
+            return new SongListViewCell();
+            }
+        });
+        
+    }
+    
     
     @FXML
     private Button playBtn;
