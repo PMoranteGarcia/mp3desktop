@@ -6,6 +6,8 @@ package prac1.controllers;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import prac1.exceptions.NoDurationException;
+import prac1.exceptions.DuplicatedItemException;
 import prac1.Model.Song;
 import prac1.main.SongListViewCell;
 
@@ -44,6 +47,8 @@ public class MainScreenController implements Initializable {
     private ListView<Song> listView;
     
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
+    private List<String> titles = new ArrayList<>();
+
     
     
     /**
@@ -73,15 +78,20 @@ public class MainScreenController implements Initializable {
                    
                     if ( !song.getDuration().equals("null") ) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
                         
-                        songObservableList.add(song);                        
-                        listView.setItems(songObservableList);                     
+                        if( !titles.contains(song.getTitle()) ) {
+                            songObservableList.add(song);                        
+                            listView.setItems(songObservableList); 
+                            titles.add(song.getTitle());
+                        } else {
+                            throw new DuplicatedItemException("Són elements duplicats!");
+                        }
                         
                     } else {
-                        throw new NoDurationException("");
+                        throw new NoDurationException("Arxiu sense duració!");
                     }
                     
                 } else {
-                    throw new RuntimeException("Arxiu massa gran");             // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
+                    throw new RuntimeException("Arxiu massa gran!");             // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
                 }
                 
             }
@@ -102,7 +112,16 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("Tamany superior a 20MB");
             
+        } catch (DuplicatedItemException e) {                                   // Mostra un AVÍS quan se selecciona una cançó que ja existeix al llistat
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Avís");
+            alert.setContentText("La Cançó seleccionada ja existeix al llistat.");
+            alert.show();
+            System.out.println("Cançó sense duració");
+            
         } catch (NoDurationException e) {
+            
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Avís");
             alert.setContentText("Cançó sense duració: " + e.getLocalizedMessage());

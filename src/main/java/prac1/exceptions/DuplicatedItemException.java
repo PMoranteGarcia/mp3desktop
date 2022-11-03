@@ -5,14 +5,15 @@
 package prac1.exceptions;
 
 /**
- * Error que es mostra quan es vol carregar un arxiu d'àudio sense duració
- * (00:00) des del diàleg de selecció d'arxius del sistema operatiu.
+ * Error que es mostra quan es vol carregar un arxiu d'àudio que ja existeix al
+ * llistat del reproductor.
  *
  * @author Txell Llanas
  */
-public class NoDurationException extends Exception {
+public class DuplicatedItemException extends Exception {
 
-    public NoDurationException(String msg) {
+    public DuplicatedItemException(String msg) {
         super(msg);
     }
+
 }

@@ -85,7 +85,7 @@ public class SongListViewCell extends ListCell<Song> {
             System.out.println("ID: " + indexLabel);
             
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
-            System.out.println("NOM: "+getTitleLabel());
+            System.out.println("NOM: "+ song.getTitle());
             
             try {
                 
@@ -99,18 +99,6 @@ public class SongListViewCell extends ListCell<Song> {
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
         }
 
-    }
-
-    /**
-     * Recupera el títol d'una cançó del llistat.
-     * 
-     * @return Mostra un String amb el títol que conté l'etiqueta 'titleLabel'
-     * 
-     * @author Txell Llanas
-     */
-    public String getTitleLabel() {
-        String nom = titleLabel.getText();
-        return nom;
     }
     
 }
