@@ -56,10 +56,6 @@ public class MainScreenController implements Initializable {
     private void openFile() throws UnsupportedAudioFileException, NoDurationException {
         
         try {
-            
-            FileChooser.ExtensionFilter extension;
-            extension = new FileChooser.ExtensionFilter("MP3-File", "*.mp3");   // Filtre: Limitar tipus d'arxiu a MP3
-            fileChooser.getExtensionFilters().add(extension);
 
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
             song = new Song(file);                                              // Crear nou objecte de tipus cançó
@@ -131,6 +127,10 @@ public class MainScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         openBtn.setTooltip(tooltip);
+        
+        FileChooser.ExtensionFilter extension;                                  // Filtre: Limitar tipus d'arxiu a MP3
+        extension = new FileChooser.ExtensionFilter("MP3-File", "*.mp3");
+        fileChooser.getExtensionFilters().add(extension);
         
         Label placeholder = new Label("Afegeix una cançó.");                    // Especifico un texte d'ajuda per quan el llistat està buit
         listView.setPlaceholder(placeholder);        

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import java.lang.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -18,9 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="rowLayoutContainer" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="rowLayoutContainer" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="NEVER">
+      <GridPane alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="NEVER">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="44.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="30.0" />
@@ -37,7 +38,7 @@
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="55.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="playRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none;" text="reproduir" textFill="TRANSPARENT">
+            <Button fx:id="playRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none; -fx-cursor: hand;" text="reproduir" textFill="TRANSPARENT">
                <graphic>
                   <ImageView id="play" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -45,9 +46,6 @@
                      </image>
                   </ImageView>
                </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
             </Button>
             <Separator opacity="0.0" orientation="VERTICAL" prefWidth="30.0" GridPane.columnIndex="1" />
             <Label fx:id="indexLabel" alignment="CENTER_RIGHT" minWidth="-Infinity" prefWidth="50.0" text="id" GridPane.columnIndex="2">
@@ -69,7 +67,7 @@
             <Separator opacity="0.0" orientation="VERTICAL" prefWidth="30.0" GridPane.columnIndex="6" />
             <VBox alignment="CENTER" prefWidth="50.0" GridPane.columnIndex="7">
                <children>
-                  <Button alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="19.0" prefWidth="30.0" style="-fx-background-color: none;" text="amunt" textAlignment="CENTER">
+                  <Button fx:id="upRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="19.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" text="amunt" textAlignment="CENTER">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -77,11 +75,8 @@
                            </image>
                         </ImageView>
                      </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="19.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="30.0" style="-fx-background-color: none;" text="avall" textAlignment="CENTER">
+                  <Button fx:id="dwnRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="19.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" text="avall" textAlignment="CENTER">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -89,27 +84,18 @@
                            </image>
                         </ImageView>
                      </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </Button>
                </children>
             </VBox>
             <Separator orientation="VERTICAL" prefWidth="50.0" GridPane.columnIndex="8" />
-            <Button fx:id="deleteRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none;" text="esborrar" textFill="TRANSPARENT" GridPane.columnIndex="9">
+            <Button fx:id="deleteRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none; -fx-cursor: hand;" text="esborrar" textFill="TRANSPARENT" GridPane.columnIndex="9">
                <graphic>
                   <ImageView id="bin" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/deleteBtn.png" />
                      </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </ImageView>
                </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
             </Button>
          </children>
       </GridPane>
