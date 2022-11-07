@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -70,6 +71,7 @@ public class MainScreenController implements Initializable {
 
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
     private List<String> titles = new ArrayList<>();
+    
 
     /**
      * *
@@ -117,24 +119,25 @@ public class MainScreenController implements Initializable {
         try {
 
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
-            song = new Song(file);                                              // Crear nou objecte de tipus cançó
-
-            if (file.exists()) {                                              // Si s'ha obert un arxiu prèviament...
-
+            song = new Song(file);                                             // Crear nou objecte de tipus cançó
+            song.setPath(file);
+                   
+            if ( file.exists() ) {                                              // Si s'ha obert un arxiu prèviament...
+                
                 fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
 
                 // Genero un índex per a cada element a llistar
                 String index = String.format("%02d", listView.getItems().size() + 1);
                 song.setIndex(index);
-
-                long fileSize = file.length();
-                if (fileSize <= MAX_FILE_SIZE) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
-
-                    if (!song.getDuration().equals("null")) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
-
-                        if (!titles.contains(song.getTitle())) {
+                
+                long fileSize = file.length();                
+                if ( fileSize <= MAX_FILE_SIZE ) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
+                   
+                    if ( !song.getDuration().equals("null") ) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
+                        
+                        if( !titles.contains(song.getTitle()) ) {
                             songObservableList.add(song);
-                            listView.setItems(songObservableList);
+                            listView.setItems(songObservableList); 
                             titles.add(song.getTitle());
                             songNumber = titles.size();                         //numero de cançcons
                         } else {
@@ -146,7 +149,7 @@ public class MainScreenController implements Initializable {
                     }
 
                 } else {
-                    throw new RuntimeException("Arxiu massa gran!");             // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
+                    throw new RuntimeException("Arxiu massa gran!");            // Error personalitzat per limitar tamany d'arxiu (MAX_FILE_SIZE)
                 }
 
             }
@@ -197,7 +200,29 @@ public class MainScreenController implements Initializable {
     @FXML
     private void playSong() {
         openBtn.setDisable(true);                                               // Deshabilita el botó d'afegir cançons
-
+        System.out.println("index:" + song.getIndex());
+        //media = new Media(song.getPath()); 
+        
+        //media = new Media(Integer.parseInt(songObservableList.get(song.getIndex())));
+        //System.out.println(songObservableList.get(0).toString());
+        
+         //Initialising path of the media file, replace this with your file path   
+        String path = song.getPath(); //"/home/javatpoint/Downloads/test.mp3";  
+        System.out.println("path:" + path); 
+        //Instantiating Media class  
+        media = new Media(new File(path).toString());
+        System.out.println("media: "+ media);
+          
+        //Instantiating MediaPlayer class   
+        mediaPlayer = new MediaPlayer(media);  
+          
+        //by setting this property to true, the audio will be played   
+        mediaPlayer.setAutoPlay(true);  
+        //primaryStage.setTitle("Playing Audio");  
+        //primaryStage.show();  
+        
+        
+        
     }
 
     @FXML
