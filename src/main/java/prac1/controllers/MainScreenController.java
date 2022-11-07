@@ -210,14 +210,15 @@ public class MainScreenController implements Initializable {
         String path = song.getPath(); //"/home/javatpoint/Downloads/test.mp3";  
         System.out.println("path:" + path); 
         //Instantiating Media class  
-        media = new Media(new File(path).toString());
+        //media = new Media(new File(path).toString());
+        media = new Media("");
         System.out.println("media: "+ media);
           
         //Instantiating MediaPlayer class   
         mediaPlayer = new MediaPlayer(media);  
           
         //by setting this property to true, the audio will be played   
-        mediaPlayer.setAutoPlay(true);  
+        mediaPlayer.play();  
         //primaryStage.setTitle("Playing Audio");  
         //primaryStage.show();  
         
