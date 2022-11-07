@@ -24,11 +24,22 @@ public class Song {
     private String index;
     private String title;
     private String duration;
+     private String path;
+
 
     public Song(File file) {
         this.file = file;
     }
   
+    public String getPath() {      
+        return path;
+    }
+
+    public void setPath(File file) {
+        path = file.toURI().toString();
+        this.path = path;
+    }
+        
     public String getIndex() {
         return index;
     }
