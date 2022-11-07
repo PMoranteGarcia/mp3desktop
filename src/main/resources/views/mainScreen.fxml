@@ -128,7 +128,7 @@
                                             </graphic>
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button fx:id="btnNextSong" mnemonicParsing="false" onAction="#NextSong">
+                                        <Button fx:id="btnNextSong" mnemonicParsing="false" onAction="#nextSong">
                                             <graphic>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>

@@ -57,10 +57,10 @@ public class MainScreenController implements Initializable {
     private Timer timer;
     private TimerTask task;
     private boolean running;
-    
+
     @FXML
     private ProgressBar progressBar;
-    
+
     @FXML
     private Button openBtn;
     Tooltip tooltip = new Tooltip("Carregar cançó");
@@ -101,7 +101,7 @@ public class MainScreenController implements Initializable {
             }
         });
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
-        
+
         progressBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
     }
 
@@ -221,8 +221,46 @@ public class MainScreenController implements Initializable {
     private Button btnNextSong;
 
     @FXML
-    void NextSong(ActionEvent event) {
+    public void nextSong() {
+        System.out.println("NextSong:");
+        System.out.println(songObservableList.size());
+        if (songObservableList.size() > 0) {
+            if (songNumber < songObservableList.size() - 1) {
 
+                songNumber++;
+
+               // mediaPlayer.stop();
+
+                if (running) {
+
+                    //cancelTimer();
+                }
+                System.out.println("Cançó reproduint:");
+                System.out.println(songObservableList.get(songNumber).toString());
+                media = new Media(songObservableList.get(songNumber).toString());
+                mediaPlayer = new MediaPlayer(media);
+
+                //songLabel.setText(songs.get(songNumber).getName());
+                playSong();
+            } else {
+                System.out.println("else");
+                songNumber = 0;
+
+                //mediaPlayer.stop();
+
+                media = new Media(songObservableList.get(songNumber).toString());
+                mediaPlayer = new MediaPlayer(media);
+
+                //songLabel.setText(songs.get(songNumber).getName());
+                playSong();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Avís");
+            alert.setContentText("No s'ha seleccionat cap arxiu.");
+            alert.show();
+            System.out.println("CANCEL");
+        }
     }
 
     @FXML
