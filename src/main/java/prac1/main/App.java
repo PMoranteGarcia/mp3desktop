@@ -33,7 +33,7 @@ public class App extends Application {
             
             primaryStage.setScene(scene);
             primaryStage.setTitle("Reproductor MP3");
-            primaryStage.setMinWidth(640);
+            primaryStage.setMinWidth(650);
             primaryStage.setMinHeight(480);            
             primaryStage.show();
             
