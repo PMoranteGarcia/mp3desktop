@@ -5,9 +5,9 @@
 package prac1.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -108,8 +108,8 @@ public class MainScreenController implements Initializable {
     Tooltip tooltip = new Tooltip("Carregar cançó");
 
     /**
-     * (RF01): Obre un 'Dialog' per seleccionar un arxiu *.mp3 dins el Sistema
-     * Operatiu i el llista dins un 'listView'.
+     * (RF01): Permet seleccionar un arxiu *.mp3 dins el Sistema Operatiu i el
+     * llista dins una 'listView' connectada a una 'ObservableList'.
      *
      * @author Txell Llanas
      */
@@ -119,21 +119,20 @@ public class MainScreenController implements Initializable {
         try {
 
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
-            song = new Song(file);                                             // Crear nou objecte de tipus cançó
+            song = new Song(file);                                              // Crear nou objecte de tipus cançó
             song.setPath(file);
 
-            if (file.exists()) {                                              // Si s'ha obert un arxiu prèviament...
+            if (file.canRead()) {                                               //  Filtre 1: Si l'arxiu existeix i té permissos de lectura...
 
-                fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
+                fileChooser.setInitialDirectory(file.getParentFile());          // Si s'ha obert un arxiu prèviament, recorda/obre l'últim directori visitat
 
-                // Genero un índex per a cada element a llistar
-                String index = String.format("%02d", listView.getItems().size() + 1);
+                String index = String.format("%02d", listView.getItems().size() + 1);  // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
 
                 long fileSize = file.length();
-                if (fileSize <= MAX_FILE_SIZE) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
+                if (fileSize <= MAX_FILE_SIZE) {                                // Filtre 2: limitar pes arxiu (MAX_FILE_SIZE)
 
-                    if (!song.getDuration().equals("null")) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
+                    if (!song.getDuration().equals("null")) {                   // Filtre 3: Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
 
                         if (!titles.contains(song.getTitle())) {
                             songObservableList.add(song);
@@ -144,7 +143,7 @@ public class MainScreenController implements Initializable {
                         }
 
                     } else {
-                        throw new NoDurationException("Arxiu sense duració!");
+                        throw new NoDurationException("Arxiu sense duració!");  // Error personalitzat per indicar que l'arxiu no té duració i no es pot reproduir
                     }
 
                 } else {
@@ -153,18 +152,20 @@ public class MainScreenController implements Initializable {
 
             }
 
-        } catch (NullPointerException e) {                                    // Mostra un AVÍS si no se selecciona cap fitxer
+        } catch (NullPointerException e) {                                      // Mostra un AVÍS si no se selecciona cap fitxer
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Avís");
+            alert.setTitle("Missatge informatiu");
+            alert.setHeaderText("No es pot carregar cap cançó");
             alert.setContentText("No s'ha seleccionat cap arxiu.");
             alert.show();
-            System.out.println("CANCEL");
+            System.out.println("S'ha clicat CANCEL·LAR. No s'ha obert cap arxiu");
 
         } catch (RuntimeException e) {                                          // Mostra un AVÍS si el fitxer supera el tamany màxim d'arxiu (MAX_FILE_SIZE)
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Avís");
+            alert.setTitle("Missatge informatiu");
+            alert.setHeaderText("Arxiu massa gran!");
             alert.setContentText("El tamany de l'arxiu excedeix del límit (20MB).");
             alert.show();
             System.out.println("Tamany superior a 20MB");
@@ -172,22 +173,41 @@ public class MainScreenController implements Initializable {
         } catch (DuplicatedItemException e) {                                   // Mostra un AVÍS quan se selecciona una cançó que ja existeix al llistat
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Avís");
+            alert.setTitle("Missatge d'error");
+            alert.setHeaderText("La cançó no es pot afegir");
             alert.setContentText("La Cançó seleccionada ja existeix al llistat.");
             alert.show();
-            System.out.println("Cançó sense duració");
+            System.out.println("Cançó repetida");
 
-        } catch (NoDurationException e) {
+        } catch (NoDurationException e) {                                       // Mostra un AVÍS quan se selecciona una cançó que no té duració (00:00)
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Avís");
-            alert.setContentText("Cançó sense duració: " + e.getLocalizedMessage());
+            alert.setTitle("Missatge d'error");
+            alert.setHeaderText("La cançó no es pot reproduir ");
+            alert.setContentText("Cançó sense duració (00:00): " 
+                                  + e.getLocalizedMessage());
             alert.show();
             System.out.println("Cançó sense duració");
 
-        } catch (Exception e) {
+        } catch (IOException e) {                                               // Mostra un AVÍS quan no es troba l'arxiu
 
-            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avís important");
+            alert.setHeaderText("La cançó no es pot reproduir ");
+            alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+            alert.show();
+            System.out.println("Arxiu no trobat, IOException: " + e.getMessage());
+
+        } catch (UnsupportedAudioFileException e) {                             // Mostra un AVÍS quan l'arxiu no està realment codificat amb format (*.mp3)
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avís important");
+            alert.setHeaderText("La cançó no és un arxiu mp3 vàlid ");
+            alert.setContentText("L'arxiu no està correctament codificat o no "
+                + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
+            alert.show();
+            System.out.println("L'arxiu no és un MP3: " + e.getMessage());
 
         }
 
