@@ -72,6 +72,12 @@ public class MainScreenController implements Initializable {
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
     private List<String> titles = new ArrayList<>();
 
+    public ObservableList<Song> getSongObservableList() {
+        return songObservableList;
+    }
+    
+    
+
     /**
      * *
      * Inicialitza el controlador
@@ -102,7 +108,6 @@ public class MainScreenController implements Initializable {
             }
         });
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
-
         progressBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
         progressBar.setStyle("-fx-accent: green;");
 
@@ -126,6 +131,8 @@ public class MainScreenController implements Initializable {
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
             song = new Song(file);                                              // Crear nou objecte de tipus cançó
             song.setPath(file);
+            listView.refresh();
+            System.out.println("song: "+ listView.getItems().size());
 
             if (file.canRead()) {                                               //  Filtre 1: Si l'arxiu existeix i té permissos de lectura...
 
@@ -133,6 +140,7 @@ public class MainScreenController implements Initializable {
 
                 String index = String.format("%02d", listView.getItems().size() + 1);  // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
+                
 
                 long fileSize = file.length();
                 if (fileSize <= MAX_FILE_SIZE) {                                // Filtre 2: limitar pes arxiu (MAX_FILE_SIZE)
@@ -140,8 +148,10 @@ public class MainScreenController implements Initializable {
                     if (!song.getDuration().equals("null")) {                   // Filtre 3: Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
 
                         if (!titles.contains(song.getTitle())) {
+                            
                             songObservableList.add(song);
                             listView.setItems(songObservableList);
+                            System.out.println("Llistat: "+ listView.getItems().size());
                             titles.add(song.getTitle());
                         } else {
                             throw new DuplicatedItemException("Són elements duplicats!");
@@ -402,5 +412,15 @@ public class MainScreenController implements Initializable {
 
         running = false;
         timer.cancel();
+    }
+    
+    
+    public void deleteSong(int numIndex) {
+        //listView.refresh();
+        System.out.println(listView.getItems().size());
+        System.out.println(songObservableList);
+        System.out.println(numIndex);
+        songObservableList.remove(numIndex);
+        listView.refresh();
     }
 }

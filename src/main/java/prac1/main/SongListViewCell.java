@@ -20,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Screen;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import prac1.Model.Song;
+import prac1.controllers.MainScreenController;
 import prac1.exceptions.NoDurationException;
 
 /**
@@ -49,7 +50,15 @@ public class SongListViewCell extends ListCell<Song> {
     private Label durationLabel;
 
     private FXMLLoader fxmlLoader;
+    
+    private  MainScreenController row = null;
 
+    public SongListViewCell() {
+        
+        
+    }
+
+    
     /**
      * Renderitza una fila del llistat de les cançons amb les dades
      * corresponents a cada cançó carregada.
@@ -87,7 +96,7 @@ public class SongListViewCell extends ListCell<Song> {
 
             indexLabel.setText(String.valueOf(song.getIndex() + ". "));         // Assigno un índex a la cançó
             System.out.println("ID: " + indexLabel);
-
+            
             titleLabel.setMinWidth(200);
             titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
@@ -104,17 +113,22 @@ public class SongListViewCell extends ListCell<Song> {
             rowLayoutContainer.setAlignment(Pos.CENTER);                        // Forçar aliniament vertical dels elements
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
             HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
+            deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
+            
+
+//            deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                //row = new MainScreenController();
+//                //row.deleteSong(1);
+//                System.out.println("clicat");
+//                System.out.println("index: " + row.getSongObservableList().get(0));
+//            }
+//        });
 
         }
     }
     
-    protected void deleteSong() {        
-        deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println(event);
-            }
-        });
-    }
+    
 
 }
