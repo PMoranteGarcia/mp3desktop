@@ -16,15 +16,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prac1.controllers.MainScreenController">
+<VBox id="finestra" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="630.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prac1.controllers.MainScreenController">
     <children>
         <BorderPane>
             <top>
                 <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" BorderPane.alignment="CENTER">
                     <children>
-                        <FlowPane alignment="CENTER_LEFT" prefWrapLength="600.0">
+                        <FlowPane id="bg-list-title" alignment="CENTER_LEFT" prefWrapLength="600.0" stylesheets="@../css/styles.css">
                             <children>
-                                <Label style="-fx-label-padding: 0 0 0 20;" text="Llista de reproducció" textAlignment="CENTER">
+                                <Label id="list-title" styleClass="txt-white" stylesheets="@../css/styles.css" text="Llista de reproducció" textAlignment="CENTER">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
@@ -60,11 +60,11 @@
                         <HBox alignment="CENTER" prefHeight="36.0" prefWidth="630.0">
                            <children>
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00:00" />
+                              <Text id="tcr-start" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
                                       <ProgressBar fx:id="progressBar" prefHeight="23.0" prefWidth="557.0" progress="0.0" />
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00:00" />
+                              <Text id="tcr-end" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
                            </children>
                         </HBox>
@@ -84,7 +84,7 @@
                                             </image>
                                         </ImageView>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button fx:id="btnPrevSong" mnemonicParsing="false">
+                                        <Button fx:id="btnPrevSong" mnemonicParsing="false" onAction="#prevSong">
                                             <graphic>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -94,7 +94,7 @@
                                             </graphic>
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button mnemonicParsing="false">
+                                        <Button fx:id="fwdBtn" mnemonicParsing="false" onAction="#fwdTime">
                                             <graphic>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -118,7 +118,7 @@
                                             </graphic>
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button mnemonicParsing="false">
+                                        <Button fx:id="rwdBtn" mnemonicParsing="false" onAction="#rwdTime">
                                             <graphic>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
