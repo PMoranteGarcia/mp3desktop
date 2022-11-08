@@ -58,10 +58,10 @@ public class MainScreenController implements Initializable {
     private Timer timer;
     private TimerTask task;
     private boolean running;
-    
+
     @FXML
     private ProgressBar progressBar;
-    
+
     @FXML
     private Button openBtn;
     Tooltip tooltip = new Tooltip("Carregar cançó");
@@ -71,7 +71,6 @@ public class MainScreenController implements Initializable {
 
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
     private List<String> titles = new ArrayList<>();
-    
 
     /**
      * *
@@ -103,7 +102,7 @@ public class MainScreenController implements Initializable {
             }
         });
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
-        
+
         progressBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
     }
 
@@ -121,23 +120,23 @@ public class MainScreenController implements Initializable {
             File file = fileChooser.showOpenDialog(null);                       // Obrir 'Dialog' per seleccionar l'arxiu d'àudio
             song = new Song(file);                                             // Crear nou objecte de tipus cançó
             song.setPath(file);
-                   
-            if ( file.exists() ) {                                              // Si s'ha obert un arxiu prèviament...
-                
+
+            if (file.exists()) {                                              // Si s'ha obert un arxiu prèviament...
+
                 fileChooser.setInitialDirectory(file.getParentFile());          // ...recorda/obre l'últim directori visitat
 
                 // Genero un índex per a cada element a llistar
                 String index = String.format("%02d", listView.getItems().size() + 1);
                 song.setIndex(index);
-                
-                long fileSize = file.length();                
-                if ( fileSize <= MAX_FILE_SIZE ) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
-                   
-                    if ( !song.getDuration().equals("null") ) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
-                        
-                        if( !titles.contains(song.getTitle()) ) {
+
+                long fileSize = file.length();
+                if (fileSize <= MAX_FILE_SIZE) {                              // Filtre: limitar pes arxiu (MAX_FILE_SIZE)
+
+                    if (!song.getDuration().equals("null")) {                 // Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
+
+                        if (!titles.contains(song.getTitle())) {
                             songObservableList.add(song);
-                            listView.setItems(songObservableList); 
+                            listView.setItems(songObservableList);
                             titles.add(song.getTitle());
                             songNumber = titles.size();                         //numero de cançcons
                         } else {
@@ -199,31 +198,34 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void playSong() {
-        openBtn.setDisable(true);                                               // Deshabilita el botó d'afegir cançons
+        openBtn.setDisable(true);
+
+        Media hit = new Media(song.getPath());
+        mediaPlayer = new MediaPlayer(hit);
+        mediaPlayer.play();
+        /*
+// Deshabilita el botó d'afegir cançons
         System.out.println("index:" + song.getIndex());
         //media = new Media(song.getPath()); 
-        
+
         //media = new Media(Integer.parseInt(songObservableList.get(song.getIndex())));
         //System.out.println(songObservableList.get(0).toString());
-        
-         //Initialising path of the media file, replace this with your file path   
+        //Initialising path of the media file, replace this with your file path   
         String path = song.getPath(); //"/home/javatpoint/Downloads/test.mp3";  
-        System.out.println("path:" + path); 
+        System.out.println("path:" + path);
         //Instantiating Media class  
         //media = new Media(new File(path).toString());
         media = new Media("");
         System.out.println("media: "+ media);
           
         //Instantiating MediaPlayer class   
-        mediaPlayer = new MediaPlayer(media);  
-          
+        mediaPlayer = new MediaPlayer(media);
+
         //by setting this property to true, the audio will be played   
         mediaPlayer.play();  
         //primaryStage.setTitle("Playing Audio");  
         //primaryStage.show();  
-        
-        
-        
+         */
     }
 
     @FXML
@@ -247,8 +249,43 @@ public class MainScreenController implements Initializable {
     private Button btnNextSong;
 
     @FXML
-    void NextSong(ActionEvent event) {
-
+    public void nextSong() {
+//        System.out.println("NextSong:");
+//        System.out.println(songObservableList.size());
+//        System.out.println(songObservableList.get(songNumber).getPath());
+//        if (songObservableList.size() > 0) {
+//            if (songNumber < songObservableList.size() - 1) {                   //si es la última cançó
+//
+//                songNumber++;
+//
+//                // mediaPlayer.stop();
+//                if (running) {
+//
+//                    //cancelTimer();
+//                }
+//                System.out.println("Cançó reproduint:");
+//                System.out.println(songObservableList.get(songNumber).getPath());
+//                media = new Media(songObservableList.get(songNumber).getPath());
+//                mediaPlayer = new MediaPlayer(media);
+//
+//                playSong();
+//            } else {
+//                System.out.println("else");
+//                songNumber = 0;
+//
+//                //mediaPlayer.stop();
+//                media = new Media(songObservableList.get(songNumber).getPath());
+//                mediaPlayer = new MediaPlayer(media);
+//
+//                playSong();
+//            }
+//        } else {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setTitle("Avís");
+//            alert.setContentText("No s'ha seleccionat cap arxiu.");
+//            alert.show();
+//            System.out.println("CANCEL");
+//        }
     }
 
     @FXML
