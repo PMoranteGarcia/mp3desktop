@@ -7,6 +7,8 @@ package prac1.main;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -104,7 +106,15 @@ public class SongListViewCell extends ListCell<Song> {
             HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
 
         }
-
+    }
+    
+    protected void deleteSong() {        
+        deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(event);
+            }
+        });
     }
 
 }

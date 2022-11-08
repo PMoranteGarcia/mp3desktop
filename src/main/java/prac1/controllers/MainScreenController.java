@@ -22,9 +22,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
@@ -67,6 +69,9 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private ListView<Song> listView;
+    
+    @FXML
+    private Slider volumeSlider;
 
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
     private List<String> titles = new ArrayList<>();
@@ -217,6 +222,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void playSong() {
+        pauseBtn.setDisable(false);
         openBtn.setDisable(true);
 
         Media hit = new Media(song.getPath());
@@ -229,7 +235,22 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void pauseSong() {
-        openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+        mediaPlayer.pause();
+
+        Status currentStatus = mediaPlayer.getStatus();
+
+        if (currentStatus == Status.PLAYING) {
+            openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+            mediaPlayer.pause();
+            playBtn.setDisable(true);
+            pauseBtn.setText("Continue");
+        } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
+            openBtn.setDisable(true);
+            System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
+            mediaPlayer.play();
+            pauseBtn.setText("Pause");
+            playBtn.setDisable(false);
+        }
 
     }
 
@@ -239,6 +260,8 @@ public class MainScreenController implements Initializable {
     @FXML
     private void stopSong() {
         openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+        mediaPlayer.stop();
+        pauseBtn.setDisable(true);
     }
 
     @FXML
