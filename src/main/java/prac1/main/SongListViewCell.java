@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -50,15 +51,13 @@ public class SongListViewCell extends ListCell<Song> {
     private Label durationLabel;
 
     private FXMLLoader fxmlLoader;
-    
-    private  MainScreenController row = null;
+
+    private MainScreenController row = null;
 
     public SongListViewCell() {
-        
-        
+
     }
 
-    
     /**
      * Renderitza una fila del llistat de les cançons amb les dades
      * corresponents a cada cançó carregada.
@@ -96,7 +95,7 @@ public class SongListViewCell extends ListCell<Song> {
 
             indexLabel.setText(String.valueOf(song.getIndex() + ". "));         // Assigno un índex a la cançó
             System.out.println("ID: " + indexLabel);
-            
+
             titleLabel.setMinWidth(200);
             titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
@@ -113,8 +112,17 @@ public class SongListViewCell extends ListCell<Song> {
             rowLayoutContainer.setAlignment(Pos.CENTER);                        // Forçar aliniament vertical dels elements
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
             HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
-            deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
-            
+            try {
+                deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot eliminar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
 
 //            deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
 //            @Override
@@ -125,10 +133,7 @@ public class SongListViewCell extends ListCell<Song> {
 //                System.out.println("index: " + row.getSongObservableList().get(0));
 //            }
 //        });
-
         }
     }
-    
-    
 
 }

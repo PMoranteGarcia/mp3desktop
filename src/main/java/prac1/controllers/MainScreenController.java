@@ -65,18 +65,15 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private ListView<Song> listView;
-    
+
     @FXML
     private Slider volumeSlider;
 
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
-    private List<String> titles = new ArrayList<>();
 
     public ObservableList<Song> getSongObservableList() {
         return songObservableList;
     }
-    
-    
 
     /**
      * *
@@ -132,7 +129,7 @@ public class MainScreenController implements Initializable {
             song = new Song(file);                                              // Crear nou objecte de tipus cançó
             song.setPath(file);
             listView.refresh();
-            System.out.println("song: "+ listView.getItems().size());
+            System.out.println("song: " + listView.getItems().size());
 
             if (file.canRead()) {                                               //  Filtre 1: Si l'arxiu existeix i té permissos de lectura...
 
@@ -140,19 +137,16 @@ public class MainScreenController implements Initializable {
 
                 String index = String.format("%02d", listView.getItems().size() + 1);  // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
-                
 
                 long fileSize = file.length();
                 if (fileSize <= MAX_FILE_SIZE) {                                // Filtre 2: limitar pes arxiu (MAX_FILE_SIZE)
 
                     if (!song.getDuration().equals("null")) {                   // Filtre 3: Si l'arxiu té una duració major a 00:00, afegir-la al llistat                       
 
-                        if (!titles.contains(song.getTitle())) {
-                            
+                        if (!comprovarTitol(songObservableList, song.getTitle())) {
+
                             songObservableList.add(song);
                             listView.setItems(songObservableList);
-                            System.out.println("Llistat: "+ listView.getItems().size());
-                            titles.add(song.getTitle());
                         } else {
                             throw new DuplicatedItemException("Són elements duplicats!");
                         }
@@ -199,8 +193,8 @@ public class MainScreenController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Missatge d'error");
             alert.setHeaderText("La cançó no es pot reproduir ");
-            alert.setContentText("Cançó sense duració (00:00): " 
-                                  + e.getLocalizedMessage());
+            alert.setContentText("Cançó sense duració (00:00): "
+                    + e.getLocalizedMessage());
             alert.show();
             System.out.println("Cançó sense duració");
 
@@ -210,7 +204,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no es pot reproduir ");
             alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
-                + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
             alert.show();
             System.out.println("Arxiu no trobat, IOException: " + e.getMessage());
 
@@ -220,7 +214,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no és un arxiu mp3 vàlid ");
             alert.setContentText("L'arxiu no està correctament codificat o no "
-                + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
+                    + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
             alert.show();
             System.out.println("L'arxiu no és un MP3: " + e.getMessage());
 
@@ -246,23 +240,41 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button pauseBtn;
 
+    /**
+     * (RF07): Métode per pausar la cançó Pausar la cançó tenint en compte que
+     * s'ha de gaurdar el mínut on es pausa amb el currentStatus sabem en quin
+     * moment es troba: si s'esta reproduint, la cançó es pausarà si està
+     * parada, la cançó continuara reproduint-se
+     *
+     * @author Pablo Morante
+     */
     @FXML
     private void pauseSong() {
-        mediaPlayer.pause();
-
-        Status currentStatus = mediaPlayer.getStatus();
-
-        if (currentStatus == Status.PLAYING) {
-            openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+        try {
             mediaPlayer.pause();
-            playBtn.setDisable(true);
-            pauseBtn.setText("Continue");
-        } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
-            openBtn.setDisable(true);
-            System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
-            mediaPlayer.play();
-            pauseBtn.setText("Pause");
-            playBtn.setDisable(false);
+
+            Status currentStatus = mediaPlayer.getStatus();
+
+            if (currentStatus == Status.PLAYING) {
+                openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+                mediaPlayer.pause();
+                playBtn.setDisable(true);
+                pauseBtn.setText("Continue");
+            } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
+                openBtn.setDisable(true);
+                System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
+                mediaPlayer.play();
+                pauseBtn.setText("Pause");
+                playBtn.setDisable(false);
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avís important");
+            alert.setHeaderText("La cançó no es pot pausar.");
+            alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+            alert.show();
+            System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
         }
 
     }
@@ -270,11 +282,27 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button stopBtn;
 
+    /**
+     * (RF07): Métode per aturar la cançó en aquest cas la cançó atura la
+     * reproducció sense guardar a quin minut es troba
+     *
+     * @author Pablo Morante
+     */
     @FXML
     private void stopSong() {
-        openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
-        mediaPlayer.stop();
-        pauseBtn.setDisable(true);
+        try {
+            openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+            mediaPlayer.stop();
+            pauseBtn.setDisable(true);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avís important");
+            alert.setHeaderText("La cançó no es pot aturar.");
+            alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+            alert.show();
+            System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -413,14 +441,21 @@ public class MainScreenController implements Initializable {
         running = false;
         timer.cancel();
     }
-    
-    
-    public void deleteSong(int numIndex) {
-        //listView.refresh();
-        System.out.println(listView.getItems().size());
-        System.out.println(songObservableList);
-        System.out.println(numIndex);
-        songObservableList.remove(numIndex);
-        listView.refresh();
+
+    /**
+     * (RF05): Creació de mètode per facilitar l'eliminació de cançons aquest
+     * mètode comprova Song per Song si el títol es repeteix aixó fa que no
+     * calgui una array abans creada 'títols'
+     *
+     * @author Pablo Morante
+     */
+    public boolean comprovarTitol(ObservableList<Song> songs, String nouTitol) {
+        for (Song song : songs) {
+            if (song.getTitle().equals(nouTitol)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 }
