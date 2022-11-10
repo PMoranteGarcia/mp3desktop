@@ -57,7 +57,8 @@
 #llistat .placeholder .label {-fx-text-fill: #fff; 
                               -fx-font-size: 20px;}
 
-.list-cell {-fx-font-size:24.0; 
+.list-cell #txt_Title, .list-cell #txt_Duration {-fx-font-size:28px!important; }
+.list-cell {-fx-font-size:18px!important; 
             -fx-text-fill: #000; 
             -fx-background-radius: 10;}
 .list-cell:filled:selected:focused, .list-cell:filled:selected {-fx-background-color: #ff0000;}
@@ -77,19 +78,19 @@
 .list-cell:filled #playRow {-fx-background-image:url("../icons/playRow_inactive.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
-                     -fx-background-size: 40px;
-                     -fx-pref-width: 40; 
-                     -fx-pref-height: 40;}
-.list-cell:filled:selected #playRow, .list-cell:filled #playRow:hover {-fx-background-image:url("../icons/playRow.png");}
-.list-cell:filled:selected #playRow:hover, .list-cell .button #playRow:armed {-fx-background-image:url("../icons/playRow_active.png");}
+                     -fx-background-size: 60px;
+                     -fx-pref-width: 60; 
+                     -fx-pref-height: 60;}
+.list-cell:filled #playRow:hover {-fx-background-image:url("../icons/playRow.png");}
+.list-cell:filled:selected #playRow, .list-cell:filled:selected #playRow:hover, .list-cell .button #playRow:armed {-fx-background-image:url("../icons/playRow_active.png");}
 
 /* Botó UP LLISTAT */
 .list-cell:filled #upRow {-fx-background-image:url("../icons/arrowUp_inactive.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
-                     -fx-background-size: 30px;
-                     -fx-pref-width: 30; 
-                     -fx-pref-height: 30;}
+                     -fx-background-size: 25px;
+                     -fx-pref-width: 25; 
+                     -fx-pref-height: 25;}
 .list-cell:filled:selected #upRow, .list-cell:filled #upRow:hover {-fx-background-image:url("../icons/arrowUp.png");}
 .list-cell:filled:selected #upRow:hover, .list-cell .button #upRow:armed {-fx-background-image:url("../icons/arrowUp_active.png");}
 
@@ -97,9 +98,9 @@
 .list-cell:filled #dwnRow {-fx-background-image:url("../icons/arrowDwn_inactive.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
-                     -fx-background-size: 30px;
-                     -fx-pref-width: 30; 
-                     -fx-pref-height: 30;}
+                     -fx-background-size: 25px;
+                     -fx-pref-width: 25; 
+                     -fx-pref-height: 25;}
 .list-cell:filled:selected #dwnRow, .list-cell:filled #dwnRow:hover {-fx-background-image:url("../icons/arrowDwn.png");}
 .list-cell:filled:selected #dwnRow:hover, .list-cell .button #dwnRow:armed {-fx-background-image:url("../icons/arrowDwn_active.png");}
 
@@ -107,9 +108,9 @@
 .list-cell:filled #deleteRow {-fx-background-image:url("../icons/delete_inactive.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
-                     -fx-background-size: 35px;
-                     -fx-pref-width: 40; 
-                     -fx-pref-height: 40;}
+                     -fx-background-size: 30px;
+                     -fx-pref-width: 30; 
+                     -fx-pref-height: 30;}
 .list-cell:filled:selected #deleteRow, .list-cell:filled #deleteRow:hover {-fx-background-image:url("../icons/delete.png");}
 .list-cell:filled:selected #deleteRow:hover, .list-cell .button #deleteRow:armed {-fx-background-image:url("../icons/delete_active.png");}
 
@@ -136,7 +137,7 @@
  * PANELL CONTROLS DE REPRODUCCIÓ                                              *
  *                                                                             *
  ******************************************************************************/
-#contenidor-controls {-fx-background-color: #4d4d4d;}
+#contenidor-controls {-fx-background-color: #4d4d4d; -fx-padding:20px;}
 #play {-fx-background-image:url("../icons/play.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
