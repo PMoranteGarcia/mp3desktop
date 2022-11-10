@@ -101,7 +101,15 @@ public class MainScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        openBtn.setTooltip(tooltip);
+        openBtn.setTooltip(openTooltip);
+        playBtn.setTooltip(playTooltip);
+        pauseBtn.setTooltip(pauseTooltip);
+        stopBtn.setTooltip(stopTooltip);
+        btnNextSong.setTooltip(nextTooltip);
+        btnPrevSong.setTooltip(prevTooltip);
+        fwdBtn.setTooltip(fwdTooltip);
+        rwdBtn.setTooltip(rwdTooltip);
+        randomSong.setTooltip(randomTooltip);
 
         FileChooser.ExtensionFilter extension;                                  // Filtre: Limitar tipus d'arxiu a MP3
         extension = new FileChooser.ExtensionFilter("MP3-File", "*.mp3");
@@ -145,7 +153,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button openBtn;
-    Tooltip tooltip = new Tooltip("Carregar cançó");
+    Tooltip openTooltip = new Tooltip("Carregar cançó");
 
     /**
      * (RF01): Permet seleccionar un arxiu *.mp3 dins el Sistema Operatiu i el
@@ -257,9 +265,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button playBtn;
-
-    @FXML
-    private ImageView playPauseImg;
+    Tooltip playTooltip = new Tooltip("Reproduir cançó");
 
     @FXML
     private Label currentSongTitle;
@@ -288,6 +294,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button pauseBtn;
+    Tooltip pauseTooltip = new Tooltip("Pausar cançó");
 
     /**
      * (RF07): Métode per pausar la cançó Pausar la cançó tenint en compte que
@@ -332,6 +339,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button stopBtn;
+    Tooltip stopTooltip = new Tooltip("Parar cançó");
 
     /**
      * (RF07): Métode per aturar la cançó en aquest cas la cançó atura la
@@ -358,6 +366,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button btnNextSong;
+    Tooltip nextTooltip = new Tooltip("Cançó següent");
 
     @FXML
     public void nextSong() {
@@ -401,7 +410,8 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button btnPrevSong;
-
+    Tooltip prevTooltip = new Tooltip("Cançó anterior");
+    
     @FXML
     void prevSong() {
         System.out.println("####PrevSong:");
@@ -446,6 +456,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button fwdBtn;
+    Tooltip fwdTooltip = new Tooltip("Avançar 10 seg.");
 
     @FXML
     void fwdTime() {
@@ -456,11 +467,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button rwdBtn;
-
-    @FXML
-    void randomSong() {
-
-    }
+    Tooltip rwdTooltip = new Tooltip("Retrocedir 10 seg.");
 
     @FXML
     void rwdTime() {
@@ -471,6 +478,12 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button randomSong;
+    Tooltip randomTooltip = new Tooltip("Reproducció aleatòria");
+    
+     @FXML
+    void randomSong() {
+
+    }
 
     public void beginTimer() {
 
