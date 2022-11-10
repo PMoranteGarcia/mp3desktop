@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -16,27 +17,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prac1.controllers.MainScreenController">
+<VBox id="finestra" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="700.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prac1.controllers.MainScreenController">
     <children>
         <BorderPane>
             <top>
                 <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="90.0" BorderPane.alignment="CENTER">
                     <children>
-                        <FlowPane alignment="CENTER_LEFT" prefWrapLength="600.0">
+                        <FlowPane id="bg-list-title" alignment="CENTER_LEFT" prefWrapLength="550.0" styleClass="round-corners">
                             <children>
-                                <Label style="-fx-label-padding: 0 0 0 20;" text="Llista de reproducció" textAlignment="CENTER">
+                                <Label id="list-title" styleClass="txt-white" text="Llista de Reproducció">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Label>
                             </children>
                         </FlowPane>
-                        <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" prefWrapLength="100.0">
+                        <FlowPane alignment="CENTER" columnHalignment="CENTER" prefWrapLength="150.0">
                             <children>
-                                <Button fx:id="openBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#openFile" style="-fx-cursor: hand; -fx-background-radius: 50%; -fx-pref-width: 50; -fx-pref-height: 50;" text="+" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+                                <Button id="btn-open" fx:id="openBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" graphicTextGap="0.0" mnemonicParsing="false" onAction="#openFile" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
+                                    <FlowPane.margin>
+                                        <Insets left="20.0" right="20.0" />
+                                    </FlowPane.margin>
                                 </Button>
                             </children>
                         </FlowPane>
@@ -44,28 +48,39 @@
                 </HBox>
             </top>
             <center>
-                <VBox fx:id="listContainer">
+                <VBox id="contenidor-llistat" fx:id="listContainer" alignment="CENTER">
                     <children>
-                        <ListView fx:id="listView" fixedCellSize="60.0" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../css/styles.css">                      
+                        <ListView id="llistat" fx:id="listView" prefHeight="240.0" styleClass="round-corners">
                         </ListView> 
                     </children>
                 </VBox>
             </center>
             <bottom>
-                <HBox alignment="CENTER" fillHeight="false" maxHeight="100.0" prefHeight="100.0" BorderPane.alignment="CENTER">
+                <HBox id="contenidor-controls" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="660.0" styleClass="round-corners" BorderPane.alignment="CENTER">
                     <children>
                         <VBox alignment="CENTER">
                             <children>
                         <Separator opacity="0.0" prefHeight="33.0" prefWidth="630.0" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                              <Label fx:id="currentSongTitle" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                           </children>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="36.0" prefWidth="630.0">
                            <children>
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                              <Slider fx:id="sliderBar" minorTickCount="1" prefHeight="18.0" prefWidth="615.0" stylesheets="@../css/styles.css" />
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00:00" />
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                      <ProgressBar fx:id="progressBar" prefHeight="23.0" prefWidth="557.0" progress="0.0" />
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="00:00" />
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
+                              <Text id="tcr-start" fx:id="actualTime" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
+                              <Text id="tcr-end" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="/" />
+                              <Text id="tcr-end" fx:id="songTime" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="20.0" prefWidth="9.0" />
                            </children>
                         </HBox>
                         <Separator opacity="0.0" prefHeight="2.0" prefWidth="630.0" />
@@ -77,55 +92,25 @@
                                                 <Image url="@../icons/volume_off.png" />
                                             </image>
                                         </ImageView>
-                                        <Slider prefHeight="18.0" prefWidth="86.0" />
+                                        <Slider fx:id="volumeSlider" minorTickCount="1" prefHeight="18.0" prefWidth="86.0" snapToTicks="true" value="50.0" />
                                         <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../icons/volume_on.png" />
                                             </image>
                                         </ImageView>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button fx:id="btnPrevSong" mnemonicParsing="false">
-                                            <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../icons/previousSong.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
+                                        <Button id="previous" fx:id="btnPrevSong" ellipsisString="" mnemonicParsing="false" onAction="#prevSong">
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button mnemonicParsing="false">
-                                            <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../icons/forge-icon-back.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
+                                        <Button id="rwd" fx:id="rwdBtn" contentDisplay="CENTER" ellipsisString="" graphicTextGap="0.0" mnemonicParsing="false" onAction="#rwdTime" textAlignment="CENTER">
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button fx:id="playBtn" mnemonicParsing="false" onAction="#playSong" text="Play" />
+                                        <Button id="play" fx:id="playBtn" contentDisplay="CENTER" ellipsisString="" graphicTextGap="0.0" mnemonicParsing="false" onAction="#playSong" />
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" HBox.hgrow="NEVER" />
-                                        <Button fx:id="pauseBtn" mnemonicParsing="false" onAction="#pauseSong" text="Pause" />
-                                        <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stopSong" textFill="TRANSPARENT">
-                                            <graphic>
-                                                <ImageView fitHeight="21.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../icons/stop.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
+                                        <Button id="stop" fx:id="stopBtn" ellipsisString="" mnemonicParsing="false" onAction="#stopSong" textFill="TRANSPARENT">
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                                        <Button mnemonicParsing="false">
-                                            <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../icons/forge-icon.for.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
+                                        <Button id="fwd" fx:id="fwdBtn" ellipsisString="" mnemonicParsing="false" onAction="#fwdTime">
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
                                         <Button fx:id="btnNextSong" mnemonicParsing="false" onAction="#nextSong">
@@ -138,6 +123,10 @@
                                             </graphic>
                                         </Button>
                                         <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
+                                        <Button id="random" fx:id="randomSong" mnemonicParsing="false" onAction="#randomSong">
+                                            
+                                        </Button>
+                                        <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="30.0" />
                                     </children>
                                 </HBox>
                             </children>

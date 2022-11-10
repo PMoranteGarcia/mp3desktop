@@ -1,84 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.Cursor?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="rowLayoutContainer" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<HBox id="song-layout" fx:id="rowLayoutContainer" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="playRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none; -fx-cursor: hand;" text="reproduir" textFill="TRANSPARENT">
-         <graphic>
-            <ImageView id="play" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/playBtn.png" />
-               </image>
-            </ImageView>
-         </graphic>
+      <Button id="playRow" fx:id="playRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" styleClass="semiTransparent" text="reproduir" textFill="TRANSPARENT">
       </Button>
-      <Separator opacity="0.0" orientation="VERTICAL" prefWidth="30.0" GridPane.columnIndex="1" />
-      <Label fx:id="indexLabel" alignment="CENTER_RIGHT" minWidth="-Infinity" prefWidth="50.0" text="id" GridPane.columnIndex="2">
+      <Separator minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" orientation="VERTICAL" prefWidth="30.0" />
+      <Label id="txt_index" fx:id="indexLabel" alignment="CENTER_RIGHT" minWidth="-Infinity" prefWidth="50.0" stylesheets="@../css/styles.css" text="id">
          <font>
             <Font size="23.0" />
          </font>
       </Label>
-      <Label fx:id="titleLabel" text="Title" GridPane.columnIndex="3">
+      <Label id="txt_Title" fx:id="titleLabel" stylesheets="@../css/styles.css" text="Title">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator opacity="0.0" orientation="VERTICAL" prefWidth="30.0" GridPane.columnIndex="4" />
-      <Label fx:id="durationLabel" alignment="CENTER" text="00:00" GridPane.columnIndex="5">
+      <Separator minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" orientation="VERTICAL" prefWidth="30.0" />
+      <Label id="txt_Duration" fx:id="durationLabel" alignment="CENTER" stylesheets="@../css/styles.css" text="00:00">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Separator opacity="0.0" orientation="VERTICAL" prefWidth="30.0" GridPane.columnIndex="6" />
-      <VBox alignment="CENTER" prefWidth="50.0" GridPane.columnIndex="7">
+      <Separator minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" orientation="VERTICAL" prefWidth="30.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Separator>
+      <VBox alignment="CENTER" prefWidth="50.0" stylesheets="@../css/styles.css">
          <children>
-            <Button fx:id="upRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="19.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" text="amunt" textAlignment="CENTER">
-               <graphic>
-                  <ImageView pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/arrow-up.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
+            <Button id="upRow" fx:id="upRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="19.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" stylesheets="@../css/styles.css" text="amunt" textAlignment="CENTER">
             </Button>
-            <Button fx:id="dwnRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="19.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" text="avall" textAlignment="CENTER">
-               <graphic>
-                  <ImageView pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/arrow-dwn.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
+            <Button id="dwnRow" fx:id="dwnRowBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutX="19.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="30.0" style="-fx-background-color: none; -fx-cursor: hand;" stylesheets="@../css/styles.css" text="avall" textAlignment="CENTER">
             </Button>
          </children>
       </VBox>
-      <Separator orientation="VERTICAL" prefHeight="60.0" prefWidth="42.0" GridPane.columnIndex="8" />
-      <Button fx:id="deleteRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: none; -fx-cursor: hand;" text="esborrar" textFill="TRANSPARENT" GridPane.columnIndex="9">
-         <graphic>
-            <ImageView id="bin" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/deleteBtn.png" />
-               </image>
-            </ImageView>
-         </graphic>
+      <Separator minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefWidth="30.0" />
+      <Button id="deleteRow" fx:id="deleteRowBtn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="44.0" stylesheets="@../css/styles.css" text="esborrar" textFill="TRANSPARENT">
       </Button>
    </children>
+   <padding>
+      <Insets bottom="10.0" top="10.0" />
+   </padding>
 </HBox>

@@ -10,14 +10,17 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Screen;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import prac1.Model.Song;
+import prac1.controllers.MainScreenController;
 import prac1.exceptions.NoDurationException;
 
 /**
@@ -33,6 +36,7 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Button playRowBtn;
+    private Tooltip playTooltip = new Tooltip("Reproduir cançó");
 
     @FXML
     private Label indexLabel;
@@ -42,11 +46,18 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Button deleteRowBtn;
+    private Tooltip deleteTooltip = new Tooltip("Eliminar cançó");
 
     @FXML
     private Label durationLabel;
 
     private FXMLLoader fxmlLoader;
+
+    private MainScreenController row = null;
+    
+    public SongListViewCell() {
+
+    }
 
     /**
      * Renderitza una fila del llistat de les cançons amb les dades
@@ -82,6 +93,8 @@ public class SongListViewCell extends ListCell<Song> {
                 }
 
             }
+            
+            playRowBtn.setTooltip(playTooltip);
 
             indexLabel.setText(String.valueOf(song.getIndex() + ". "));         // Assigno un índex a la cançó
             System.out.println("ID: " + indexLabel);
@@ -99,12 +112,42 @@ public class SongListViewCell extends ListCell<Song> {
                 Logger.getLogger(SongListViewCell.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            deleteRowBtn.setTooltip(deleteTooltip);
+            
             rowLayoutContainer.setAlignment(Pos.CENTER);                        // Forçar aliniament vertical dels elements
+            rowLayoutContainer.setStyle("-fx-margin:50px");
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
             HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
+            //HBox.setMargin(rowLayoutContainer, new Insets(50,0,50,0));
+            try {
+                deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot eliminar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
+
+            try {
+                playRowBtn.setOnAction(event -> {
+                    //new MainScreenController().setSongNumber(getListView().getEditingIndex());
+                    //new MainScreenController().play();
+                });
+                //
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot eliminar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
 
         }
-
     }
 
 }
