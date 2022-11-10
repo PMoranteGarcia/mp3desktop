@@ -103,14 +103,12 @@ public class MainScreenController implements Initializable {
 
         openBtn.setTooltip(openTooltip);
         playBtn.setTooltip(playTooltip);
-        pauseBtn.setTooltip(pauseTooltip);
         stopBtn.setTooltip(stopTooltip);
         btnNextSong.setTooltip(nextTooltip);
         btnPrevSong.setTooltip(prevTooltip);
         fwdBtn.setTooltip(fwdTooltip);
         rwdBtn.setTooltip(rwdTooltip);
         randomSong.setTooltip(randomTooltip);
-
         FileChooser.ExtensionFilter extension;                                  // Filtre: Limitar tipus d'arxiu a MP3
         extension = new FileChooser.ExtensionFilter("MP3-File", "*.mp3");
         fileChooser.getExtensionFilters().add(extension);
@@ -292,10 +290,6 @@ public class MainScreenController implements Initializable {
 
     }
 
-    @FXML
-    private Button pauseBtn;
-    Tooltip pauseTooltip = new Tooltip("Pausar cançó");
-
     /**
      * (RF07): Métode per pausar la cançó Pausar la cançó tenint en compte que
      * s'ha de gaurdar el mínut on es pausa amb el currentStatus sabem en quin
@@ -322,7 +316,6 @@ public class MainScreenController implements Initializable {
                 openBtn.setDisable(true);
                 System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
                 mediaPlayer.play();
-//                pauseBtn.setText("Pause");
 //                playBtn.setDisable(false);
             }
         } catch (Exception e) {
@@ -352,7 +345,6 @@ public class MainScreenController implements Initializable {
         try {
             openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
             mediaPlayer.stop();
-            pauseBtn.setDisable(true);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Avís important");
@@ -411,7 +403,7 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button btnPrevSong;
     Tooltip prevTooltip = new Tooltip("Cançó anterior");
-    
+
     @FXML
     void prevSong() {
         System.out.println("####PrevSong:");
@@ -479,8 +471,8 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button randomSong;
     Tooltip randomTooltip = new Tooltip("Reproducció aleatòria");
-    
-     @FXML
+
+    @FXML
     void randomSong() {
 
     }
