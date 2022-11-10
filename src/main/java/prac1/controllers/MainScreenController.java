@@ -78,9 +78,6 @@ public class MainScreenController implements Initializable {
     private Slider sliderBar;
 
     @FXML
-    private Slider volumSlider;
-
-    @FXML
     private ListView<Song> listView;
 
     @FXML
@@ -124,14 +121,25 @@ public class MainScreenController implements Initializable {
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
         sliderBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
 
-        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
+//        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+//
+//                //mediaPlayer.seek(javafx.util.Duration.seconds(sliderBar.getValue()));
+//            }
+//        });
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
 
-                //mediaPlayer.seek(javafx.util.Duration.seconds(sliderBar.getValue()));
+                if (mediaPlayer != null) {
+                    mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+                }
             }
-
         });
+
+        currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
+        currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
 
     }
 
@@ -253,6 +261,9 @@ public class MainScreenController implements Initializable {
     @FXML
     private ImageView playPauseImg;
 
+    @FXML
+    private Label currentSongTitle;
+
     public void play() {
         playSong();
     }
@@ -265,7 +276,7 @@ public class MainScreenController implements Initializable {
         }
 
         if (!running && mediaPlayer != null) {
-
+            currentSongTitle.setText(songObservableList.get(songNumber - 1).getTitle());
             beginTimer();
             mediaPlayer.play();
             running = true;
