@@ -7,8 +7,6 @@ package prac1.main;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -16,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Screen;
@@ -37,6 +36,7 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Button playRowBtn;
+    private Tooltip playTooltip = new Tooltip("Reproduir cançó");
 
     @FXML
     private Label indexLabel;
@@ -46,6 +46,7 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Button deleteRowBtn;
+    private Tooltip deleteTooltip = new Tooltip("Eliminar cançó");
 
     @FXML
     private Label durationLabel;
@@ -53,7 +54,7 @@ public class SongListViewCell extends ListCell<Song> {
     private FXMLLoader fxmlLoader;
 
     private MainScreenController row = null;
-
+    
     public SongListViewCell() {
 
     }
@@ -92,6 +93,8 @@ public class SongListViewCell extends ListCell<Song> {
                 }
 
             }
+            
+            playRowBtn.setTooltip(playTooltip);
 
             indexLabel.setText(String.valueOf(song.getIndex() + ". "));         // Assigno un índex a la cançó
             System.out.println("ID: " + indexLabel);
@@ -109,9 +112,13 @@ public class SongListViewCell extends ListCell<Song> {
                 Logger.getLogger(SongListViewCell.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            deleteRowBtn.setTooltip(deleteTooltip);
+            
             rowLayoutContainer.setAlignment(Pos.CENTER);                        // Forçar aliniament vertical dels elements
+            rowLayoutContainer.setStyle("-fx-margin:50px");
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
             HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
+            //HBox.setMargin(rowLayoutContainer, new Insets(50,0,50,0));
             try {
                 deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
             } catch (Exception e) {

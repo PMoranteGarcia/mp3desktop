@@ -30,11 +30,12 @@ public class App extends Application {
             Parent p = fxmlLoader.load();
 
             scene = new Scene(p);
+            scene.getStylesheets().add("/css/styles.css");                      // Carrega els estils CSS
             
             primaryStage.setScene(scene);
             primaryStage.setTitle("Reproductor MP3");
-            primaryStage.setMinWidth(650);
-            primaryStage.setMinHeight(480);            
+            primaryStage.setMinWidth(700);
+            primaryStage.setMinHeight(500);            
             primaryStage.show();
             
         } catch (IOException ex){
