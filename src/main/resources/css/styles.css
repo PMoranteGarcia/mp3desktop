@@ -6,37 +6,84 @@
 /* ESTILS GENÈRICS */
 .button {
     -fx-background-color: transparent;
-    -fx-cursor: hand;    
+    -fx-cursor: hand;
 }
-.txt-white {-fx-text-fill: #fff!important;}
+.txt-white {
+    -fx-text-fill: #fff!important;
+}
 
 
 /* FINESTRA REPRODUCTOR */
-#finestra {-fx-background-color:linear-gradient(#777 0%, #333 100%);}
-#bg-list-title {-fx-background-color: #333; -fx-background-radius: 10px;}
-#list-title {-fx-label-padding: 0 0 0 20;}
+#finestra {
+    -fx-background-color:linear-gradient(#777 0%, #333 100%);
+}
+#bg-list-title {
+    -fx-background-color: #333;
+    -fx-background-radius: 10px;
+}
+#list-title {
+    -fx-label-padding: 0 0 0 20;
+}
 /* LISTVIEW */
-.list-cell{-fx-font-size:24.0; -fx-text-fill: #000;}
-.list-cell:filled:selected:focused, .list-cell:filled:selected {-fx-background-color: #ff0000;}
-.list-cell:even {-fx-background-color: white;}
-.list-cell:filled:hover {-fx-background-color: #eee;}
+.list-cell{
+    -fx-font-size:24.0;
+    -fx-text-fill: #000;
+}
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #ff0000;
+}
+.list-cell:even {
+    -fx-background-color: white;
+}
+.list-cell:filled:hover {
+    -fx-background-color: #eee;
+}
 
 /* Botó PLAY */
-.list-cell .button #play {-fx-opacity: 0.5;}
-.list-cell:hover .button #play {-fx-opacity: 1;}
+.list-cell .button #play {
+    -fx-opacity: 0.5;
+}
+.list-cell:hover .button #play {
+    -fx-opacity: 1;
+}
 
 /* Textes FILES */
-.list-cell #txt_index, .list-cell #txt_Title, .list-cell #txt_Duration {-fx-opacity: 0.5;}
+.list-cell #txt_index, .list-cell #txt_Title, .list-cell #txt_Duration {
+    -fx-opacity: 0.5;
+}
 
 /* Textes FILES HOVER + SELECCIONADES */
-.list-cell:hover #txt_index, 
-.list-cell:hover #txt_Title, 
-.list-cell:hover #txt_Duration, 
-.list-cell:filled:selected:focused #txt_index, 
-.list-cell:filled:selected:focused #txt_Title, 
-.list-cell:filled:selected:focused #txt_Duration {-fx-opacity: 1;}
+.list-cell:hover #txt_index,
+.list-cell:hover #txt_Title,
+.list-cell:hover #txt_Duration,
+.list-cell:filled:selected:focused #txt_index,
+.list-cell:filled:selected:focused #txt_Title,
+.list-cell:filled:selected:focused #txt_Duration {
+    -fx-opacity: 1;
+}
 
 /* Textes FILES SELECCIONADES */
-.list-cell:filled:selected:focused #txt_index, 
-.list-cell:filled:selected:focused #txt_Title, 
-.list-cell:filled:selected:focused #txt_Duration {-fx-text-fill: #fff; /*-fx-font-weight: bold;*/}
+.list-cell:filled:selected:focused #txt_index,
+.list-cell:filled:selected:focused #txt_Title,
+.list-cell:filled:selected:focused #txt_Duration {
+    -fx-text-fill: #fff; /*-fx-font-weight: bold;*/
+}
+
+
+
+
+.slider .track{
+    -fx-background-color:#A6A6A6 !important;
+    -fx-pref-height:0.5 !important;
+}
+.slider .thumb{
+    -fx-background-color:#A6A6A6!important;
+}
+#sliderBar .track{
+    -fx-background-color:#FFFFFF !important;
+}
+#sliderBar .thumb{
+    -fx-background-color:#ff0000!important;
+}
+
+

@@ -124,15 +124,22 @@ public class SongListViewCell extends ListCell<Song> {
                 System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
             }
 
-//            deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                //row = new MainScreenController();
-//                //row.deleteSong(1);
-//                System.out.println("clicat");
-//                System.out.println("index: " + row.getSongObservableList().get(0));
-//            }
-//        });
+            try {
+                playRowBtn.setOnAction(event -> {
+                    //new MainScreenController().setSongNumber(getListView().getEditingIndex());
+                    //new MainScreenController().play();
+                });
+                //
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot eliminar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
+
         }
     }
 

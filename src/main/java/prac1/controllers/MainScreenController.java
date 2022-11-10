@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,12 +23,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
@@ -53,7 +57,11 @@ public class MainScreenController implements Initializable {
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private int songNumber = 0;                                                // index de numero de la llista de cançcons
+    private int songNumber = 0;                                                // index de numero de la llista de cançons
+
+    public void setSongNumber(int index) {
+        songNumber = index;
+    }
 
     //control del temps de la cançó
     private Timer timer;
@@ -61,7 +69,16 @@ public class MainScreenController implements Initializable {
     private boolean running;
 
     @FXML
-    private ProgressBar progressBar;
+    private Text actualTime;
+
+    @FXML
+    private Text songTime;
+
+    @FXML
+    private Slider sliderBar;
+
+    @FXML
+    private Slider volumSlider;
 
     @FXML
     private ListView<Song> listView;
@@ -105,8 +122,16 @@ public class MainScreenController implements Initializable {
             }
         });
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
-        progressBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
-        progressBar.setStyle("-fx-accent: green;");
+        sliderBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
+
+        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+
+                //mediaPlayer.seek(javafx.util.Duration.seconds(sliderBar.getValue()));
+            }
+
+        });
 
     }
 
@@ -226,15 +251,28 @@ public class MainScreenController implements Initializable {
     private Button playBtn;
 
     @FXML
-    private void playSong() {
-        pauseBtn.setDisable(false);
-        openBtn.setDisable(true);
+    private ImageView playPauseImg;
 
-        if (mediaPlayer != null) {
+    public void play() {
+        playSong();
+    }
+
+    @FXML
+    private void playSong() {
+
+        if (openBtn.isDisabled()) {
+            openBtn.setDisable(true);
+        }
+
+        if (!running && mediaPlayer != null) {
+
             beginTimer();
             mediaPlayer.play();
             running = true;
+        } else {
+            pauseSong();
         }
+
     }
 
     @FXML
@@ -258,14 +296,16 @@ public class MainScreenController implements Initializable {
             if (currentStatus == Status.PLAYING) {
                 openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
                 mediaPlayer.pause();
-                playBtn.setDisable(true);
-                pauseBtn.setText("Continue");
+//                playBtn.setDisable(true);
+//                pauseBtn.setText("Continue");
+
+                //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
             } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
                 openBtn.setDisable(true);
                 System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
                 mediaPlayer.play();
-                pauseBtn.setText("Pause");
-                playBtn.setDisable(false);
+//                pauseBtn.setText("Pause");
+//                playBtn.setDisable(false);
             }
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -399,7 +439,7 @@ public class MainScreenController implements Initializable {
     @FXML
     void fwdTime() {
         if (mediaPlayer != null) {
-            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(javafx.util.Duration.seconds(-10)));
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(javafx.util.Duration.seconds(10)));
         }
     }
 
@@ -407,11 +447,19 @@ public class MainScreenController implements Initializable {
     private Button rwdBtn;
 
     @FXML
+    void randomSong() {
+
+    }
+
+    @FXML
     void rwdTime() {
         if (mediaPlayer != null) {
-            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(javafx.util.Duration.seconds(10)));
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(javafx.util.Duration.seconds(-10)));
         }
     }
+
+    @FXML
+    private Button randomSong;
 
     public void beginTimer() {
 
@@ -424,12 +472,11 @@ public class MainScreenController implements Initializable {
                 running = true;
                 double current = mediaPlayer.getCurrentTime().toSeconds();
                 double end = media.getDuration().toSeconds();
-                progressBar.setProgress(current / end);
+                sliderBar.setMajorTickUnit(end);
+                sliderBar.setValue((current / end) * 100);
 
-                if (current / end == 1) {
-
-                    cancelTimer();
-                }
+                songTime.setText(String.format("%02.0f:%02.0f", end / 60, end % 60));
+                actualTime.setText(String.format("%02.0f:%02.0f", current / 60, current % 60));
             }
         };
 
