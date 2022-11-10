@@ -61,16 +61,26 @@
                         <VBox alignment="CENTER">
                             <children>
                         <Separator opacity="0.0" prefHeight="33.0" prefWidth="630.0" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                              <Label fx:id="currentSongTitle" textAlignment="CENTER" textFill="RED">
+                                 <font>
+                                    <Font size="30.0" />
+                                 </font>
+                              </Label>
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                           </children>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="36.0" prefWidth="630.0">
                            <children>
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
-                              <Slider fx:id="sliderBar" stylesheets="@../css/styles.css" />
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="21.0" prefWidth="9.0" />
+                              <Slider fx:id="sliderBar" minorTickCount="1" prefHeight="18.0" prefWidth="615.0" stylesheets="@../css/styles.css" />
                               <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
                               <Text id="tcr-start" fx:id="actualTime" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
                               <Text id="tcr-end" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="/" />
                               <Text id="tcr-end" fx:id="songTime" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="txt-white" text="00:00" />
-                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefWidth="20.0" />
+                              <Separator disable="true" opacity="0.0" orientation="VERTICAL" prefHeight="20.0" prefWidth="9.0" />
                            </children>
                         </HBox>
                         <Separator opacity="0.0" prefHeight="2.0" prefWidth="630.0" />
@@ -82,7 +92,7 @@
                                                 <Image url="@../icons/volume_off.png" />
                                             </image>
                                         </ImageView>
-                                        <Slider fx:id="volumeSlider" prefHeight="18.0" prefWidth="86.0" value="50.0" />
+                                        <Slider fx:id="volumeSlider" minorTickCount="1" prefHeight="18.0" prefWidth="86.0" snapToTicks="true" value="50.0" />
                                         <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@../icons/volume_on.png" />
