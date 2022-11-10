@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import prac1.utils.IdentificaOS;
 
 /**
  *
@@ -37,7 +38,7 @@ public class Song {
 
     public void setPath(File file) {
         path = file.toURI().toString();
-        this.path = path;
+        this.path = normalizeURLFormat(path);
     }
         
     public String getIndex() {
@@ -47,6 +48,21 @@ public class Song {
     public void setIndex(String index) {
         this.index = index;
     }
+    
+    /***
+     * Si la URL és basura de tipus Windows, elimina el nom de la unitat
+     * @return 
+     */
+    public static String normalizeURLFormat(String url)
+    {
+        String ret = "";
+        
+        if (IdentificaOS.getOS() == IdentificaOS.TipusOS.WIN)
+            ret = url.replace("[A-Z]{1}:", "");
+        
+        return ret;
+    }
+
     
     /**
      * Mostra el nom de la cançó seleccionada
