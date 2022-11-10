@@ -174,7 +174,7 @@ public class MainScreenController implements Initializable {
 
                 fileChooser.setInitialDirectory(file.getParentFile());          // Si s'ha obert un arxiu prèviament, recorda/obre l'últim directori visitat
 
-                String index = String.format("%02d", listView.getItems().size() + 1);  // Genero un índex de 2 dígits per a cada element a llistar
+                String index = String.format("%02d", listView.getItems().size());  // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
 
                 long fileSize = file.length();
@@ -275,19 +275,31 @@ public class MainScreenController implements Initializable {
     @FXML
     private void playSong() {
 
-        if (openBtn.isDisabled()) {
-            openBtn.setDisable(true);
-        }
+        try {
+            if (openBtn.isDisabled()) {
+                openBtn.setDisable(true);
+            }
+            if (!songObservableList.isEmpty()) {
+                if (mediaPlayer != null) {
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                    System.out.println("currentSongTitle (playSong()): " + currentSongTitle);
+                    beginTimer();
+                    mediaPlayer.play();
+                    running = true;
+                } else {
+                    song = songObservableList.get(songNumber);
+                    media = new Media(song.getPath());
+                    mediaPlayer = new MediaPlayer(media);
 
-        if (!running && mediaPlayer != null) {
-            currentSongTitle.setText(songObservableList.get(songNumber - 1).getTitle());
-            beginTimer();
-            mediaPlayer.play();
-            running = true;
-        } else {
-            pauseSong();
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                    beginTimer();
+                    mediaPlayer.play();
+                    running = true;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
-
     }
 
     /**
@@ -520,5 +532,40 @@ public class MainScreenController implements Initializable {
 
         }
         return false;
+    }
+
+    public void playSongRow(Song song) {
+        
+        System.out.println("currentSongTitle: " + currentSongTitle);
+        currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
+        currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
+
+        try {
+
+            if (!song.getPath().isEmpty()) {
+
+//                pauseBtn.setDisable(false);
+//                openBtn.setDisable(true);
+                if (mediaPlayer != null) {
+                    
+                    currentSongTitle.setText(song.getTitle());
+                    mediaPlayer.play();
+                    running = true;
+                    //beginTimer();
+                } else {
+
+                    media = new Media(song.getPath());
+                    mediaPlayer = new MediaPlayer(media);
+                    
+                    currentSongTitle.setText(song.getTitle());
+                    mediaPlayer.play();
+                    running = true;
+                    //beginTimer();
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
