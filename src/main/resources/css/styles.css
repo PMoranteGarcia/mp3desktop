@@ -144,7 +144,6 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #play:hover, #play:pressed:focused {-fx-background-image:url("../icons/play_active.png");}
-
 #pause {-fx-background-image:url("../icons/pause.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
@@ -152,7 +151,6 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #pause:hover, #pause:pressed {-fx-background-image:url("../icons/pause_active.png");}
-
 #stop {-fx-background-image:url("../icons/stop.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
@@ -160,7 +158,6 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #stop:hover, #stop:pressed:focused {-fx-background-image:url("../icons/stop_active.png");}
-
 #previous {-fx-background-image:url("../icons/previous.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
@@ -168,7 +165,6 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #previous:hover, #previous:pressed:focused {-fx-background-image:url("../icons/previous_active.png");}
-
 #next {-fx-background-image:url("../icons/next.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
@@ -176,7 +172,6 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #next:hover, #next:pressed:focused {-fx-background-image:url("../icons/next_active.png");}
-
 #rwd {-fx-background-image:url("../icons/rwd.png"); 
            -fx-background-repeat: no-repeat;
            -fx-background-position: center;
@@ -191,7 +186,13 @@
            -fx-pref-width: 30; 
            -fx-pref-height: 30;}
 #fwd:hover, #fwd:pressed:focused {-fx-background-image:url("../icons/fwd_active.png");}
-
+#random {-fx-background-image:url("../icons/random.png"); 
+           -fx-background-repeat: no-repeat;
+           -fx-background-position: center;
+           -fx-background-size: 30px;
+           -fx-pref-width: 30; 
+           -fx-pref-height: 30;}
+#random:hover, #random:pressed:focused {-fx-background-image:url("../icons/random_active.png");}
 .slider .track{
     -fx-background-color:#A6A6A6 !important;
     -fx-pref-height:0.5 !important;
