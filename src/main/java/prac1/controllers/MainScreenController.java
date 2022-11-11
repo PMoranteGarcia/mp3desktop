@@ -520,6 +520,10 @@ public class MainScreenController implements Initializable {
      * mètode comprova Song per Song si el títol es repeteix aixó fa que no
      * calgui una array abans creada 'títols'
      *
+     * @param ObservableList llista amb totes les cançons actual
+     * @param String títol de la nova canço
+     * @return Boolean si el títol es repeteix o no
+     *
      * @author Pablo Morante
      */
     public boolean comprovarTitol(ObservableList<Song> songs, String nouTitol) {
