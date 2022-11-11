@@ -449,7 +449,7 @@ public class MainScreenController implements Initializable {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Avís");
-                alert.setContentText("No hi ha més cançons a la llistad de reproducció");
+                alert.setContentText("No hi ha més cançons a la llista de reproducció");
                 alert.show();
                 System.out.println("No hi ha més cançons");
             }
