@@ -7,6 +7,7 @@ package prac1.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,7 +98,7 @@ public class MainScreenController implements Initializable {
      * object, or null if the location is not known.
      * @param rb The resources used to localize the root object, or null if the
      * root object was not localized.
-     * 
+     *
      * @author GrupD
      */
     @Override
@@ -248,7 +249,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no es pot reproduir ");
             alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
-                + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
             alert.show();
             System.out.println("Arxiu no trobat, IOException: " + e.getMessage());
 
@@ -258,7 +259,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no és un arxiu mp3 vàlid ");
             alert.setContentText("L'arxiu no està correctament codificat o no "
-                + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
+                    + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
             alert.show();
             System.out.println("L'arxiu no és un MP3: " + e.getMessage());
 
@@ -277,6 +278,11 @@ public class MainScreenController implements Initializable {
         playSong();
     }
 
+    /**
+     * (RF01): Métode per reproduir la llista de cançons. 
+     *
+     * @author Pablo Morante
+     */
     @FXML
     private void playSong() {
 
@@ -382,7 +388,7 @@ public class MainScreenController implements Initializable {
         System.out.println("####NextSong:");
 
         if (songObservableList.size() > 0) {
-            if (songNumber <= songObservableList.size()-1) {                   //si no es la última cançó
+            if (songNumber < songObservableList.size() - 1) {                   //si no es la última cançó
 
                 songNumber++;
                 System.out.println("SongNumer: " + songNumber);
@@ -489,9 +495,55 @@ public class MainScreenController implements Initializable {
     private Button randomSong;
     Tooltip randomTooltip = new Tooltip("Reproducció aleatòria");
 
+    /**
+     * (FA01): Permet reproduir cançons en mode aleatori.
+     *
+     * @author Víctor García
+     */
     @FXML
     void randomSong() {
+            if (openBtn.isDisabled()) {
+                openBtn.setDisable(true);
+            }
 
+            if (!songObservableList.isEmpty()) {
+                if (mediaPlayer != null) {
+                    int listSize = (songObservableList.size());
+
+                    Random random = new Random();
+                    int RandomPosition = random.nextInt(listSize);
+                    songNumber = RandomPosition;
+
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                    song = songObservableList.get(songNumber);
+                    media = new Media(song.getPath());
+                    mediaPlayer = new MediaPlayer(media);
+                    beginTimer();
+                    mediaPlayer.play();
+                    running = true;
+                } else {
+                    int listSize = (songObservableList.size());
+
+                    Random random = new Random();
+                    int RandomPosition = random.nextInt(listSize);
+                    songNumber = RandomPosition;
+
+                    media = new Media(song.getPath());
+                    mediaPlayer = new MediaPlayer(media);
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                    beginTimer();
+                    mediaPlayer.play();
+                    running = true;
+                }
+            } else {
+                System.out.println("else");
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Avís");
+                alert.setContentText("No hi ha cançons a la llista de reproducció");
+                alert.show();
+                System.out.println("No hi ha cançons");
+            }
     }
 
     public void beginTimer() {
@@ -544,8 +596,8 @@ public class MainScreenController implements Initializable {
     }
 
     /**
-     * (FA02): Càlcul de temps total de la llista de reproducció:
-     * s'envia la llista de cançons i es suma la duració de totes
+     * (FA02): Càlcul de temps total de la llista de reproducció: s'envia la
+     * llista de cançons i es suma la duració de totes
      *
      * @param songs llista de cançons
      * @return String duració total de la playlist
