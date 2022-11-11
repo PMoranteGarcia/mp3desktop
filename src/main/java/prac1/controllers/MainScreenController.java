@@ -375,7 +375,7 @@ public class MainScreenController implements Initializable {
         System.out.println("####NextSong:");
 
         if (songObservableList.size() > 0) {
-            if (songNumber <= songObservableList.size()) {                   //si no es la última cançó
+            if (songNumber <= songObservableList.size()-1) {                   //si no es la última cançó
 
                 songNumber++;
                 System.out.println("SongNumer: " + songNumber);
