@@ -42,6 +42,8 @@ import prac1.main.SongListViewCell;
  * @author GrupD
  * @author Txell Llanas
  * @author Izan Jimenez
+ * @author Victor García
+ * @author Pablo Morante
  */
 public class MainScreenController implements Initializable {
 
@@ -373,7 +375,7 @@ public class MainScreenController implements Initializable {
         System.out.println("####NextSong:");
 
         if (songObservableList.size() > 0) {
-            if (songNumber <= songObservableList.size() - 1) {                   //si no es la última cançó
+            if (songNumber <= songObservableList.size()) {                   //si no es la última cançó
 
                 songNumber++;
                 System.out.println("SongNumer: " + songNumber);
@@ -383,9 +385,9 @@ public class MainScreenController implements Initializable {
                 }
 
                 System.out.println("Cançó reproduint:");
-                System.out.println(songObservableList.get(songNumber - 1).getTitle());
+                System.out.println(songObservableList.get(songNumber).getTitle());
 
-                song = songObservableList.get(songNumber - 1);
+                song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
 
@@ -417,7 +419,7 @@ public class MainScreenController implements Initializable {
         System.out.println("####PrevSong:");
 
         if (songObservableList.size() > 0) {
-            if (songNumber > 1) {                                               //si no es la última cançó
+            if (songNumber >= 1) {                                               //si no es la última cançó
 
                 songNumber--;
                 System.out.println("SongNumer: " + songNumber);
@@ -428,9 +430,9 @@ public class MainScreenController implements Initializable {
                 }
 
                 System.out.println("Cançó reproduint:");
-                System.out.println(songObservableList.get(songNumber - 1).getTitle());
+                System.out.println(songObservableList.get(songNumber).getTitle());
 
-                song = songObservableList.get(songNumber - 1);
+                song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
 
