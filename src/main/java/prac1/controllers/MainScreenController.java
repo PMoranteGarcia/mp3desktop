@@ -421,7 +421,7 @@ public class MainScreenController implements Initializable {
                 song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
-
+                listView.getSelectionModel().select(songNumber);
                 playSong();
             } else {                                                            //si es la ultima
                 System.out.println("else");
@@ -466,7 +466,7 @@ public class MainScreenController implements Initializable {
                 song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
-
+                listView.getSelectionModel().select(songNumber);
                 playSong();
             } else {                                                            //si es la ultima
                 System.out.println("else");

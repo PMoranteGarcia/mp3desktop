@@ -156,6 +156,7 @@ public class SongListViewCell extends ListCell<Song> {
                         Collections.swap(items, currentIndex, currentIndex + 1);
                         items.get(currentIndex).setIndex(String.valueOf(currentIndex));
                         items.get(currentIndex+1).setIndex(String.valueOf(currentIndex+1));
+                        getListView().getSelectionModel().select(currentIndex+1);
                         getListView().refresh();
                     }
                 }
@@ -177,6 +178,7 @@ public class SongListViewCell extends ListCell<Song> {
                         Collections.swap(items, currentIndex, currentIndex - 1);
                         items.get(currentIndex).setIndex(String.valueOf(currentIndex));
                         items.get(currentIndex-1).setIndex(String.valueOf(currentIndex-1));
+                        getListView().getSelectionModel().select(currentIndex-1);
                         getListView().refresh();
                     }
                 }
