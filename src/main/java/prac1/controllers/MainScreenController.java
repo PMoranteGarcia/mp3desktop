@@ -7,8 +7,6 @@ package prac1.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,8 +23,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -151,7 +147,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button openBtn;
-    Tooltip openTooltip = new Tooltip("Carregar cançó");
+    Tooltip openTooltip = new Tooltip("Carregar cançó (Màx. 20MB)");
 
     /**
      * (RF01): Permet seleccionar un arxiu *.mp3 dins el Sistema Operatiu i el
@@ -399,7 +395,7 @@ public class MainScreenController implements Initializable {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Avís");
-                alert.setContentText("No hi ha més cançons a la llistad de reproducció");
+                alert.setContentText("No hi ha més cançons a la llista de reproducció");
                 alert.show();
                 System.out.println("No hi ha més cançons");
             }

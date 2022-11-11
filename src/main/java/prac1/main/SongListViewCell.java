@@ -36,8 +36,8 @@ public class SongListViewCell extends ListCell<Song> {
     @FXML
     private HBox rowLayoutContainer;
 
-    @FXML
-    private Button playRowBtn;
+    //@FXML
+    //private Button playRowBtn;
 
     @FXML
     private Label indexLabel;
@@ -47,6 +47,7 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Button deleteRowBtn;
+    Tooltip deleteTooltip = new Tooltip("Eliminar cançó");
 
     @FXML
     private Label durationLabel;
@@ -58,9 +59,9 @@ public class SongListViewCell extends ListCell<Song> {
     private Button upRowBtn;
 
     private FXMLLoader fxmlLoader;
-
     private MainScreenController row = null;
 
+    
     public SongListViewCell() {
 
     }
@@ -99,13 +100,20 @@ public class SongListViewCell extends ListCell<Song> {
                 }
 
             }
+            
             int index = Integer.parseInt(song.getIndex()) + 1;
-
-            indexLabel.setText(String.valueOf(index + ". "));         // Assigno un índex a la cançó
+            if(index <= 9)                                                      // Assigno un índex a la cançó
+                indexLabel.setText(String.valueOf("0" + index + ". "));
+            else
+                indexLabel.setText(String.valueOf(index + ". "));
+            
             System.out.println("ID: " + indexLabel);
 
             titleLabel.setMinWidth(200);
-            titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
+            indexLabel.setStyle("-fx-font-size:28px;");
+            // Ízan, això em surt marcat amb un error, per això ho comento. No sé què li passa... (Txell)
+            //titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
+            
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
             System.out.println("NOM: " + song.getTitle());
 
@@ -119,9 +127,10 @@ public class SongListViewCell extends ListCell<Song> {
 
             rowLayoutContainer.setAlignment(Pos.CENTER);                        // Forçar aliniament vertical dels elements
             setGraphic(rowLayoutContainer);                                     // Carrego el layout amb les dades a dins
-            HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);    //fem la llista de cancons adaptabele al monitor de la pantalla
+            HBox.setHgrow(rowLayoutContainer, Priority.ALWAYS);                 // Fem la llista de cancons adaptabele al monitor de la pantalla
             try {
                 deleteRowBtn.setOnAction(event -> getListView().getItems().remove(getItem()));
+                deleteRowBtn.setTooltip(deleteTooltip);
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Avís important");
@@ -132,7 +141,7 @@ public class SongListViewCell extends ListCell<Song> {
                 System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
             }
 
-            playRowBtn.setOnAction(new EventHandler<ActionEvent>(){
+            /*playRowBtn.setOnAction(new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event) {
                     //String path = getListView().getItems().get(getItem().getPath());
@@ -141,7 +150,7 @@ public class SongListViewCell extends ListCell<Song> {
                     row = new MainScreenController();
                     row.playSongRow(song);
                 }
-            });
+            });*/
             
             dwnRowBtn.setOnAction(new EventHandler<ActionEvent>(){
                 @Override
