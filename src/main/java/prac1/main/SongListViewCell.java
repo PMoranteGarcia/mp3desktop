@@ -154,6 +154,9 @@ public class SongListViewCell extends ListCell<Song> {
                         alert.show();
                     } else {
                         Collections.swap(items, currentIndex, currentIndex + 1);
+                        items.get(currentIndex).setIndex(String.valueOf(currentIndex));
+                        items.get(currentIndex+1).setIndex(String.valueOf(currentIndex+1));
+                        getListView().refresh();
                     }
                 }
             });
@@ -171,7 +174,10 @@ public class SongListViewCell extends ListCell<Song> {
                                 + "s'ha arribat al principi de la llista.");
                         alert.show();
                     } else {
-                        Collections.swap(items, currentIndex, currentIndex -1);
+                        Collections.swap(items, currentIndex, currentIndex - 1);
+                        items.get(currentIndex).setIndex(String.valueOf(currentIndex));
+                        items.get(currentIndex-1).setIndex(String.valueOf(currentIndex-1));
+                        getListView().refresh();
                     }
                 }
             });
