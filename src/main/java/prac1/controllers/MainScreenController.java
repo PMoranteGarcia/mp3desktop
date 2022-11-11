@@ -279,76 +279,94 @@ public class MainScreenController implements Initializable {
     }
 
     /**
-     * (RF01): Métode per reproduir la llista de cançons. 
+     * (RF01): Métode per reproduir la llista de cançons des del principi, seleccionant 
+     * un tema de la llista o després de fer nextSong(), prevSong() o pause.
      *
-     * @author Pablo Morante
+     * @author Víctor García
      */
-    @FXML
-    private void playSong() {
-
-        try {
-            if (openBtn.isDisabled()) {
-                openBtn.setDisable(true);
-            }
-            if (!songObservableList.isEmpty()) {
-                if (mediaPlayer != null) {
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    System.out.println("currentSongTitle (playSong()): " + currentSongTitle);
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                } else {
-                    song = songObservableList.get(songNumber);
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     /**
-     * (RF07): Métode per pausar la cançó Pausar la cançó tenint en compte que
-     * s'ha de gaurdar el mínut on es pausa amb el currentStatus sabem en quin
+     * (RF07): Métode per pausar la cançó tenint en compte que
+     * s'ha de guardar el minut on es pausa amb el currentStatus sabem en quin
      * moment es troba: si s'esta reproduint, la cançó es pausarà si està
      * parada, la cançó continuara reproduint-se
      *
      * @author Pablo Morante
      */
     @FXML
-    private void pauseSong() {
-        try {
-            mediaPlayer.pause();
+    private void playSong() {
 
-            Status currentStatus = mediaPlayer.getStatus();
+        if (!running == true) {
+            try {
+                if (!songObservableList.isEmpty()) {
 
-            if (currentStatus == Status.PLAYING) {
-                openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+                    if (mediaPlayer != null) {
+                        if (!openBtn.isDisabled()) {
+                            openBtn.setDisable(true);
+                        }
+                        currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                        System.out.println("currentSongTitle (playSong()): " + currentSongTitle);
+                        beginTimer();
+                        mediaPlayer.play();
+                        running = true;
+                    } else {
+                        if (!openBtn.isDisabled()) {
+                            openBtn.setDisable(true);
+                        }
+                        song = songObservableList.get(songNumber);
+                        media = new Media(song.getPath());
+                        mediaPlayer = new MediaPlayer(media);
+
+                        currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                        beginTimer();
+                        mediaPlayer.play();
+                        running = true;
+                    }
+
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Avís");
+                    alert.setHeaderText("La cançó no es pot reproduir.");
+                    alert.setContentText("La llista de reproducció es buida.");
+                    alert.show();
+                    System.out.println("CANCEL");
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot reproduir.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
+        } else {
+            try {
                 mediaPlayer.pause();
+
+                Status currentStatus = mediaPlayer.getStatus();
+
+                if (currentStatus == Status.PLAYING) {
+                    openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+                    mediaPlayer.pause();
 //                playBtn.setDisable(true);
 //                pauseBtn.setText("Continue");
 
-                //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
-            } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
-                openBtn.setDisable(true);
-                System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
-                mediaPlayer.play();
+                    //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
+                } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
+                    openBtn.setDisable(true);
+                    System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
+                    mediaPlayer.play();
 //                playBtn.setDisable(false);
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot pausar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
             }
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Avís important");
-            alert.setHeaderText("La cançó no es pot pausar.");
-            alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
-                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
-            alert.show();
-            System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
         }
 
     }
@@ -502,48 +520,48 @@ public class MainScreenController implements Initializable {
      */
     @FXML
     void randomSong() {
-            if (openBtn.isDisabled()) {
-                openBtn.setDisable(true);
-            }
+        if (openBtn.isDisabled()) {
+            openBtn.setDisable(true);
+        }
 
-            if (!songObservableList.isEmpty()) {
-                if (mediaPlayer != null) {
-                    int listSize = (songObservableList.size());
+        if (!songObservableList.isEmpty()) {
+            if (mediaPlayer != null) {
+                int listSize = (songObservableList.size());
 
-                    Random random = new Random();
-                    int RandomPosition = random.nextInt(listSize);
-                    songNumber = RandomPosition;
+                Random random = new Random();
+                int RandomPosition = random.nextInt(listSize);
+                songNumber = RandomPosition;
 
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    song = songObservableList.get(songNumber);
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                } else {
-                    int listSize = (songObservableList.size());
-
-                    Random random = new Random();
-                    int RandomPosition = random.nextInt(listSize);
-                    songNumber = RandomPosition;
-
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                }
+                currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                song = songObservableList.get(songNumber);
+                media = new Media(song.getPath());
+                mediaPlayer = new MediaPlayer(media);
+                beginTimer();
+                mediaPlayer.play();
+                running = true;
             } else {
-                System.out.println("else");
+                int listSize = (songObservableList.size());
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Avís");
-                alert.setContentText("No hi ha cançons a la llista de reproducció");
-                alert.show();
-                System.out.println("No hi ha cançons");
+                Random random = new Random();
+                int RandomPosition = random.nextInt(listSize);
+                songNumber = RandomPosition;
+
+                media = new Media(song.getPath());
+                mediaPlayer = new MediaPlayer(media);
+                currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                beginTimer();
+                mediaPlayer.play();
+                running = true;
             }
+        } else {
+            System.out.println("else");
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Avís");
+            alert.setContentText("No hi ha cançons a la llista de reproducció");
+            alert.show();
+            System.out.println("No hi ha cançons");
+        }
     }
 
     public void beginTimer() {
