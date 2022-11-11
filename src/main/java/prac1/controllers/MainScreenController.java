@@ -81,6 +81,9 @@ public class MainScreenController implements Initializable {
     @FXML
     private Slider volumeSlider;
 
+    @FXML
+    private Label TempsTotalLlista;
+
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
 
     public ObservableList<Song> getSongObservableList() {
@@ -184,6 +187,10 @@ public class MainScreenController implements Initializable {
 
                             songObservableList.add(song);
                             listView.setItems(songObservableList);
+                            String totalDuration = getPlaylistDuration(songObservableList);
+                            System.out.println("---------");
+                            System.out.println(totalDuration);
+                            TempsTotalLlista.setText("Temps total: " + totalDuration);
                         } else {
                             throw new DuplicatedItemException("Són elements duplicats!");
                         }
@@ -520,8 +527,8 @@ public class MainScreenController implements Initializable {
      * mètode comprova Song per Song si el títol es repeteix aixó fa que no
      * calgui una array abans creada 'títols'
      *
-     * @param ObservableList llista amb totes les cançons actual
-     * @param String títol de la nova canço
+     * @param songs llista amb totes les cançons actual
+     * @param nouTitol títol de la nova canço
      * @return Boolean si el títol es repeteix o no
      *
      * @author Pablo Morante
@@ -536,38 +543,44 @@ public class MainScreenController implements Initializable {
         return false;
     }
 
-    public void playSongRow(Song song) {
-        
-        System.out.println("currentSongTitle: " + currentSongTitle);
-        currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
-        currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
+    /**
+     * (FA02): Càlcul de temps total de la llista de reproducció:
+     * s'envia la llista de cançons i es suma la duració de totes
+     *
+     * @param songs llista de cançons
+     * @return String duració total de la playlist
+     * @throws UnsupportedAudioFileException, IOException, NoDurationException
+     *
+     * @author Pablo Morante
+     */
+    public String getPlaylistDuration(ObservableList<Song> songs) throws UnsupportedAudioFileException, IOException, NoDurationException {
+        String totalDuration = "00:00";
+        int minutes = 0;
+        int seconds = 0;
+        int hours = 0;
+        for (Song song : songs) {
+            String duration = song.getDuration();
+            String[] parts = duration.split(":");
+            minutes = minutes + Integer.parseInt(parts[0]);
+            seconds = seconds + Integer.parseInt(parts[1]);
 
-        try {
-
-            if (!song.getPath().isEmpty()) {
-
-//                pauseBtn.setDisable(false);
-//                openBtn.setDisable(true);
-                if (mediaPlayer != null) {
-                    
-                    currentSongTitle.setText(song.getTitle());
-                    mediaPlayer.play();
-                    running = true;
-                    //beginTimer();
-                } else {
-
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-                    
-                    currentSongTitle.setText(song.getTitle());
-                    mediaPlayer.play();
-                    running = true;
-                    //beginTimer();
-                }
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+            int temp = seconds % 60;
+            minutes = minutes + (seconds / 60);
+            seconds = temp;
+            temp = minutes % 60;
+            hours = minutes / 60;
+            minutes = temp;
         }
+
+        if (hours == 0) {
+            totalDuration = String.format("%02d:%02d", minutes, seconds);
+        } else {
+            totalDuration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
+
+        System.out.println("TOTAL   " + totalDuration);
+
+        return totalDuration;
     }
+
 }
