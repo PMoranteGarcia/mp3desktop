@@ -47,15 +47,15 @@ import prac1.main.SongListViewCell;
  */
 public class MainScreenController implements Initializable {
 
-    private final FileChooser fileChooser = new FileChooser();                  // obrir fitxers
+    private final FileChooser fileChooser = new FileChooser();                  // Obrir fitxers
     private final long MAX_FILE_SIZE = (20480L * 1024L);                        // 20.971.520 Bytes = 20MB 
-    private Song song = null;                                                   // variable per reproduir
+    private Song song = null;                                                   // Variable per reproduir
 
     //classes per reproduir media(mp3 en aquest cas)
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private int songNumber = 0;                                                // index de numero de la llista de cançons
+    private int songNumber = 0;                                                 // Índex numèric de la llista de cançons
 
     public void setSongNumber(int index) {
         songNumber = index;
@@ -91,13 +91,14 @@ public class MainScreenController implements Initializable {
     }
 
     /**
-     * *
      * Inicialitza el controlador
      *
      * @param url The location used to resolve relative paths for the root
      * object, or null if the location is not known.
      * @param rb The resources used to localize the root object, or null if the
      * root object was not localized.
+     * 
+     * @author GrupD
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -117,15 +118,14 @@ public class MainScreenController implements Initializable {
         Label placeholder = new Label("Afegeix una cançó.");                    // Especifico un texte d'ajuda per quan el llistat està buit
         listView.setPlaceholder(placeholder);
 
-        listView.setItems(songObservableList);                                  // Actualitzo el llistat amb els elements disponibles (openFile())      
-        //lambda:  listView.setCellFactory(songListView -> new SongListViewCell());        
+        listView.setItems(songObservableList);                                  // Actualitzo el llistat amb els elements disponibles (openFile())             
         listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {// Carrego un layout a cada fila del llistat, on carregar-hi les dades de la cançó afegida
             @Override
             public ListCell<Song> call(ListView<Song> songListView) {
                 return new SongListViewCell();
             }
         });
-        listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
+        listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    // Fem la llista de cancons adaptabele al monitor de la pantalla
         sliderBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
 
 //        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
@@ -175,7 +175,7 @@ public class MainScreenController implements Initializable {
 
                 fileChooser.setInitialDirectory(file.getParentFile());          // Si s'ha obert un arxiu prèviament, recorda/obre l'últim directori visitat
 
-                String index = String.format("%02d", listView.getItems().size());  // Genero un índex de 2 dígits per a cada element a llistar
+                String index = String.format("%02d", listView.getItems().size()); // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
 
                 long fileSize = file.length();
@@ -248,7 +248,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no es pot reproduir ");
             alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
-                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
             alert.show();
             System.out.println("Arxiu no trobat, IOException: " + e.getMessage());
 
@@ -258,7 +258,7 @@ public class MainScreenController implements Initializable {
             alert.setTitle("Avís important");
             alert.setHeaderText("La cançó no és un arxiu mp3 vàlid ");
             alert.setContentText("L'arxiu no està correctament codificat o no "
-                    + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
+                + "es tracta d'ún arxiu MP3 (" + e.getLocalizedMessage() + ")");
             alert.show();
             System.out.println("L'arxiu no és un MP3: " + e.getMessage());
 
