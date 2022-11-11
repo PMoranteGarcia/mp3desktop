@@ -305,6 +305,7 @@ public class MainScreenController implements Initializable {
                     currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
                     beginTimer();
                     mediaPlayer.play();
+                    listView.getSelectionModel().select(songNumber);
                     running = true;
                 }
             }
@@ -520,6 +521,7 @@ public class MainScreenController implements Initializable {
                     mediaPlayer = new MediaPlayer(media);
                     beginTimer();
                     mediaPlayer.play();
+                    listView.getSelectionModel().select(songNumber);
                     running = true;
                 } else {
                     int listSize = (songObservableList.size());
@@ -530,9 +532,10 @@ public class MainScreenController implements Initializable {
 
                     media = new Media(song.getPath());
                     mediaPlayer = new MediaPlayer(media);
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());                    
                     beginTimer();
                     mediaPlayer.play();
+                    listView.getSelectionModel().select(songNumber);
                     running = true;
                 }
             } else {
