@@ -155,9 +155,12 @@ public class SongListViewCell extends ListCell<Song> {
             dwnRowBtn.setOnAction(new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event) {
-//                    int currentIndex = getListView().getSelectionModel().getSelectedIndex();
-//                    System.out.println(currentIndex);
-//                    System.out.println(getListView().getSelectionModel().getSelectedItem());
+                    int currentIndex = getListView().getSelectionModel().getSelectedIndex();
+                    System.out.println("SELECTED INDEX: " + currentIndex);
+                    String asda = getListView().getSelectionModel().getSelectedItem().getIndex();
+                    System.out.println("SELECTED ITEM: " + getListView().getSelectionModel());
+                    System.out.println("INDEX ACTUAL: " + asda);
+                    System.out.println(getListView().getSelectionModel().getSelectedItem());
                     //Song song = getListView().getSelectionModel().select(currentIndex);
                 }
             });
