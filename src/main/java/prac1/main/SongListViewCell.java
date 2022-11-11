@@ -19,7 +19,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.stage.Screen;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import prac1.Model.Song;
 import prac1.controllers.MainScreenController;
@@ -35,9 +34,6 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private HBox rowLayoutContainer;
-
-    //@FXML
-    //private Button playRowBtn;
 
     @FXML
     private Label indexLabel;
