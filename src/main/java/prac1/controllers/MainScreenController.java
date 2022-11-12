@@ -7,6 +7,8 @@ package prac1.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -15,6 +17,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -66,6 +69,8 @@ public class MainScreenController implements Initializable {
     private Timer timer;
     private TimerTask task;
     private boolean running;
+
+    private boolean random = false;
 
     @FXML
     private Text actualTime;
@@ -279,16 +284,17 @@ public class MainScreenController implements Initializable {
     }
 
     /**
-     * (RF01): Métode per reproduir la llista de cançons des del principi, seleccionant 
-     * un tema de la llista o després de fer nextSong(), prevSong() o pause.
+     * (RF01): Métode per reproduir la llista de cançons des del principi,
+     * seleccionant un tema de la llista o després de fer nextSong(), prevSong()
+     * o pause.
      *
      * @author Víctor García
      */
     /**
-     * (RF07): Métode per pausar la cançó tenint en compte que
-     * s'ha de guardar el minut on es pausa amb el currentStatus sabem en quin
-     * moment es troba: si s'esta reproduint, la cançó es pausarà si està
-     * parada, la cançó continuara reproduint-se
+     * (RF07): Métode per pausar la cançó tenint en compte que s'ha de guardar
+     * el minut on es pausa amb el currentStatus sabem en quin moment es troba:
+     * si s'esta reproduint, la cançó es pausarà si està parada, la cançó
+     * continuara reproduint-se
      *
      * @author Pablo Morante
      */
@@ -520,48 +526,31 @@ public class MainScreenController implements Initializable {
      */
     @FXML
     void randomSong() {
-        if (openBtn.isDisabled()) {
-            openBtn.setDisable(true);
-        }
-
-        if (!songObservableList.isEmpty()) {
-            if (mediaPlayer != null) {
-                int listSize = (songObservableList.size());
-
-                Random random = new Random();
-                int RandomPosition = random.nextInt(listSize);
-                songNumber = RandomPosition;
-
-                currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                song = songObservableList.get(songNumber);
-                media = new Media(song.getPath());
-                mediaPlayer = new MediaPlayer(media);
-                beginTimer();
-                mediaPlayer.play();
-                running = true;
-            } else {
-                int listSize = (songObservableList.size());
-
-                Random random = new Random();
-                int RandomPosition = random.nextInt(listSize);
-                songNumber = RandomPosition;
-
-                media = new Media(song.getPath());
-                mediaPlayer = new MediaPlayer(media);
-                currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                beginTimer();
-                mediaPlayer.play();
-                running = true;
+        if (random == false) {
+            // shuffle the playlist
+            for (int i = 0; i < songObservableList.size(); ++i) {
+                Random rand = new Random();
+                int temp = rand.nextInt(songObservableList.size() - i) + i;
+                Collections.swap(songObservableList, i, temp);
+                random = true;
             }
+            System.out.println("RANDOMEEEEEEE");
+            if(running) stopSong();
+            running = false;
+            playSong();
+            randomSong.setDisable(false);
         } else {
-            System.out.println("else");
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Avís");
-            alert.setContentText("No hi ha cançons a la llista de reproducció");
-            alert.show();
-            System.out.println("No hi ha cançons");
+            Comparator<Song> songComparator = Comparator.comparing(Song::getTitle);
+            songObservableList.sort(songComparator);
+            SortedList<Song> sortedSongs = new SortedList<>(songObservableList, songComparator);
+            System.out.println("LISTA ORIGINALLLLLL");
+            random = false;
+            stopSong();
+            running = false;
+            playSong();
         }
+
+        
     }
 
     public void beginTimer() {
