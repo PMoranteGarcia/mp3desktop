@@ -153,6 +153,8 @@ public class MainScreenController implements Initializable {
 
         currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
         currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
+        
+        playBtn.getStyleClass().add("play");                                    // Assigno classe CSS per mostrar icona PLAY
 
     }
 
@@ -275,6 +277,7 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button playBtn;
     Tooltip playTooltip = new Tooltip("Reproduir cançó");
+    Tooltip pauseTooltip = new Tooltip("Pausar cançó");
 
     @FXML
     private Label currentSongTitle;
@@ -323,6 +326,11 @@ public class MainScreenController implements Initializable {
                         mediaPlayer = new MediaPlayer(media);
 
                         currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                        
+                        playBtn.getStyleClass().clear();                        // Netejo classe CSS per assignar-lu una de nova 
+                        playBtn.getStyleClass().add("pause");                   // Assigno classe CSS per mostrar icona PAUSE                        
+                        playBtn.setTooltip(pauseTooltip);
+                        
                         beginTimer();
                         mediaPlayer.play();
                         running = true;
@@ -352,7 +360,12 @@ public class MainScreenController implements Initializable {
                 Status currentStatus = mediaPlayer.getStatus();
 
                 if (currentStatus == Status.PLAYING) {
-                    openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+                    openBtn.setDisable(false);                                  // Habilita el botó d'afegir cançons
+                    
+                    playBtn.getStyleClass().clear();                            // Netejo classe CSS per assignar-li una de nova 
+                    playBtn.getStyleClass().add("play");                        // Assigno classe CSS per mostrar icona PLAY
+                    playBtn.setTooltip(playTooltip);
+                    
                     mediaPlayer.pause();
 //                playBtn.setDisable(true);
 //                pauseBtn.setText("Continue");
@@ -361,6 +374,11 @@ public class MainScreenController implements Initializable {
                 } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
                     openBtn.setDisable(true);
                     System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
+                    
+                    playBtn.getStyleClass().clear();                            // Netejo classe CSS per assignar-li una de nova 
+                    playBtn.getStyleClass().add("pause");                       // Assigno classe CSS per mostrar icona PAUSE
+                    playBtn.setTooltip(pauseTooltip);
+                    
                     mediaPlayer.play();
 //                playBtn.setDisable(false);
                 }
@@ -390,7 +408,12 @@ public class MainScreenController implements Initializable {
     @FXML
     private void stopSong() {
         try {
-            openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+            openBtn.setDisable(false);                                          // Habilita el botó d'afegir cançons
+            
+            playBtn.getStyleClass().clear();                                    // Netejo classe CSS per assignar-li una de nova 
+            playBtn.getStyleClass().add("play");                                // Assigno classe CSS per mostrar icona PLAY
+            playBtn.setTooltip(playTooltip);
+            
             mediaPlayer.stop();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
