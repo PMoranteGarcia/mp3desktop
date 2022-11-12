@@ -119,7 +119,7 @@ public class SongListViewCell extends ListCell<Song> {
             try {
 
                 durationLabel.setText(String.valueOf(song.getDuration()));      // Insereixo la duració de la cançó a l'etiqueta 'durationLabel'
-                durationLabel.setMinWidth(70);
+                durationLabel.setMinWidth(90);
             } catch (UnsupportedAudioFileException | IOException | NoDurationException ex) {
                 Logger.getLogger(SongListViewCell.class.getName()).log(Level.SEVERE, null, ex);
             }
