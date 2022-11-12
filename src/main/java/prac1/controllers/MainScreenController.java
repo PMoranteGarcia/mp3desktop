@@ -313,6 +313,7 @@ public class MainScreenController implements Initializable {
                         System.out.println("currentSongTitle (playSong()): " + currentSongTitle);
                         beginTimer();
                         mediaPlayer.play();
+                        listView.setDisable(true);
                         running = true;
                     } else {
                         if (!openBtn.isDisabled()) {
@@ -325,6 +326,7 @@ public class MainScreenController implements Initializable {
                         currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
                         beginTimer();
                         mediaPlayer.play();
+                        listView.setDisable(true);
                         running = true;
                     }
 
@@ -353,6 +355,7 @@ public class MainScreenController implements Initializable {
 
                 if (currentStatus == Status.PLAYING) {
                     openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+                    listView.setDisable(false);
                     mediaPlayer.pause();
 //                playBtn.setDisable(true);
 //                pauseBtn.setText("Continue");
@@ -360,6 +363,7 @@ public class MainScreenController implements Initializable {
                     //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
                 } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
                     openBtn.setDisable(true);
+                    listView.setDisable(true);
                     System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
                     mediaPlayer.play();
 //                playBtn.setDisable(false);
@@ -391,6 +395,7 @@ public class MainScreenController implements Initializable {
     private void stopSong() {
         try {
             openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+            listView.setDisable(false);
             mediaPlayer.stop();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
