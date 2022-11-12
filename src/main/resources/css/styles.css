@@ -171,20 +171,22 @@
 .slider#timeline .track{-fx-background-color:#FFFFFF !important;}
 .slider#timeline .thumb{-fx-background-color:#ff0000!important;}
 
-#play {-fx-background-image:url("../icons/play.png"); 
-           -fx-background-repeat: no-repeat;
-           -fx-background-position: center;
-           -fx-background-size: 30px;
-           -fx-pref-width: 30; 
-           -fx-pref-height: 30;}
-#play:hover, #play:pressed:focused {-fx-background-image:url("../icons/play_active.png");}
+.play, .play:selected {-fx-background-image:url("../icons/play.png"); 
+                       -fx-background-repeat: no-repeat;
+                       -fx-background-position: center;
+                       -fx-background-size: 30px;
+                       -fx-pref-width: 30; 
+                       -fx-pref-height: 30;
+                       -fx-cursor: hand;}
+.play:hover, .play:pressed {-fx-background-image:url("../icons/play_active.png");}
 
-.pause {-fx-background-image:url("../icons/pause.png"); 
-           -fx-background-repeat: no-repeat;
-           -fx-background-position: center;
-           -fx-background-size: 30px;
-           -fx-pref-width: 30; 
-           -fx-pref-height: 30;}
+.pause, .pause:selected {-fx-background-image:url("../icons/pause.png"); 
+                         -fx-background-repeat: no-repeat;
+                         -fx-background-position: center;
+                         -fx-background-size: 30px;
+                         -fx-pref-width: 30; 
+                         -fx-pref-height: 30;
+                         -fx-cursor: hand;}
 .pause:hover, .pause:pressed {-fx-background-image:url("../icons/pause_active.png");}
 
 #stop {-fx-background-image:url("../icons/stop.png"); 
