@@ -134,13 +134,6 @@ public class MainScreenController implements Initializable {
         listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    // Fem la llista de cancons adaptabele al monitor de la pantalla
         sliderBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
 
-//        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-//
-//                //mediaPlayer.seek(javafx.util.Duration.seconds(sliderBar.getValue()));
-//            }
-//        });
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
@@ -290,16 +283,11 @@ public class MainScreenController implements Initializable {
      * (RF01): Métode per reproduir la llista de cançons des del principi,
      * seleccionant un tema de la llista o després de fer nextSong(), prevSong()
      * o pause.
-     *
-     * @author Víctor García
-     */
-    /**
      * (RF07): Métode per pausar la cançó tenint en compte que s'ha de guardar
-     * el minut on es pausa amb el currentStatus sabem en quin moment es troba:
-     * si s'esta reproduint, la cançó es pausarà si està parada, la cançó
-     * continuara reproduint-se
+     * el minut on es pausa quan s'està reproduint
      *
      * @author Pablo Morante
+     * @author Víctor García
      */
     @FXML
     private void playSong() {
@@ -370,10 +358,7 @@ public class MainScreenController implements Initializable {
                     playBtn.setTooltip(playTooltip);
                     
                     mediaPlayer.pause();
-//                playBtn.setDisable(true);
-//                pauseBtn.setText("Continue");
 
-                    //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
                 } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
                     openBtn.setDisable(true);
                     listView.setDisable(true);
@@ -384,7 +369,6 @@ public class MainScreenController implements Initializable {
                     playBtn.setTooltip(pauseTooltip);
                     
                     mediaPlayer.play();
-//                playBtn.setDisable(false);
                 }
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
