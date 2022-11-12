@@ -416,7 +416,7 @@ public class MainScreenController implements Initializable {
 
                 songNumber++;
                 System.out.println("SongNumer: " + songNumber);
-                //mediaPlayer.stop();
+                mediaPlayer.stop();
                 if (running) {
                     cancelTimer();
                 }
@@ -461,7 +461,7 @@ public class MainScreenController implements Initializable {
                 songNumber--;
                 System.out.println("SongNumer: " + songNumber);
 
-                //mediaPlayer.stop();
+                mediaPlayer.stop();
                 if (running) {
                     cancelTimer();
                 }
@@ -567,8 +567,8 @@ public class MainScreenController implements Initializable {
                 sliderBar.setMajorTickUnit(end);
                 sliderBar.setValue((current / end) * 100);
 
-                songTime.setText(String.format("%02.0f:%02.0f", end / 60, end % 60));
-                actualTime.setText(String.format("%02.0f:%02.0f", current / 60, current % 60));
+                songTime.setText(String.format("%02.0f:%02.0f", Math.floor(end / 60), end % 60));
+                actualTime.setText(String.format("%02.0f:%02.0f", Math.floor(current / 60), current % 60));
             }
         };
 
