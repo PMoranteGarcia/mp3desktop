@@ -99,7 +99,7 @@
 .list-cell:filled:selected #playRow {-fx-background-image:url("../icons/playRow_active.png");}
 
 /* Botó UP LLISTAT */
-.list-cell #upRow {-fx-background-image:url("../icons/arrowUp_inactive.png"); 
+.list-cell #upRow {-fx-background-image:url("../icons/arrowUp.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
                      -fx-background-size: 25px;
@@ -111,7 +111,7 @@
 .list-cell:filled:selected #upRow:hover {-fx-background-image:url("../icons/arrowUp_active.png");}
 
 /* Botó DWN LLISTAT */
-.list-cell:filled #dwnRow {-fx-background-image:url("../icons/arrowDwn_inactive.png"); 
+.list-cell:filled #dwnRow {-fx-background-image:url("../icons/arrowDwn.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
                      -fx-background-size: 25px;
@@ -123,7 +123,7 @@
 .list-cell:filled:selected #dwnRow:hover {-fx-background-image:url("../icons/arrowDwn_active.png");}
 
 /* Botó DELETE LLISTAT */
-.list-cell:filled #deleteRow {-fx-background-image:url("../icons/delete_inactive.png"); 
+.list-cell:filled #deleteRow {-fx-background-image:url("../icons/delete.png"); 
                      -fx-background-repeat: no-repeat;
                      -fx-background-position: center;
                      -fx-background-size: 30px;
