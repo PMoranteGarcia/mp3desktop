@@ -293,6 +293,12 @@ public class MainScreenController implements Initializable {
     @FXML
     private void playSong() {
 
+//        songNumber = listView.getSelectionModel().getSelectedIndex();
+//        if (songNumber == 1) {
+//            songNumber = 0;
+//        }
+//        System.out.println(">> 1. songNumber: " + songNumber);
+        
         if (!running == true) {
             try {
                 if (!songObservableList.isEmpty()) {                            //Si la llista de reproducció no es buida
@@ -313,10 +319,11 @@ public class MainScreenController implements Initializable {
                         song = songObservableList.get(songNumber);              
                         media = new Media(song.getPath());                      
                         mediaPlayer = new MediaPlayer(media);
-                        currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
                         playBtn.getStyleClass().clear();                        // Netejo classe CSS per assignar-li una de nova 
                         playBtn.getStyleClass().add("pause");                   // Assigno classe CSS per mostrar icona PAUSE                        
                         playBtn.setTooltip(pauseTooltip);
+                        currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+                        listView.getSelectionModel().select(songNumber);
                         beginTimer();                                           
                         mediaPlayer.play();                                     
                         listView.setDisable(true);                              //Desactivem la llista mentre reproduïm música per no tenir accés
@@ -553,7 +560,7 @@ public class MainScreenController implements Initializable {
                 Collections.swap(songObservableList, i, temp);
                 random = true;
                 randomSong.getStyleClass().clear();                             // Netejo classe CSS per assignar-li una de nova 
-                randomSong.getStyleClass().add("random-active");                // Assigno classe CSS per mostrar icona PAUSE 
+                randomSong.getStyleClass().add("random-active");                // Assigno classe CSS per mostrar icona RANDOM ON
             }
             if(running) stopSong();
             running = false;                                                    
@@ -567,7 +574,7 @@ public class MainScreenController implements Initializable {
             stopSong();
             running = false;
             randomSong.getStyleClass().clear();                                 // Netejo classe CSS per assignar-li una de nova 
-            randomSong.getStyleClass().add("random");                           // Assigno classe CSS per mostrar icona PAUSE;
+            randomSong.getStyleClass().add("random");                           // Assigno classe CSS per mostrar icona RANDOM OFF;
             playSong();
         }        
     }

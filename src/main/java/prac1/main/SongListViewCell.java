@@ -70,6 +70,7 @@ public class SongListViewCell extends ListCell<Song> {
      * @param song Arxiu d'àudio carregat al llistat
      * @param empty Boleà per determinar si hi ha contingut o no dins la fila
      *
+     * @author GrupD
      * @author Txell Llanas
      * @author Pablo Morante
      * @author Izan Jimenez
