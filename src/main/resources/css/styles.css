@@ -229,10 +229,18 @@
            -fx-pref-height: 30;}
 #fwd:hover, #fwd:pressed:focused {-fx-background-image:url("../icons/fwd_active.png");}
 
-#random {-fx-background-image:url("../icons/random.png"); 
-           -fx-background-repeat: no-repeat;
-           -fx-background-position: center;
-           -fx-background-size: 30px;
-           -fx-pref-width: 30; 
-           -fx-pref-height: 30;}
-#random:hover, #random:pressed:focused {-fx-background-image:url("../icons/random_active.png");}
+.random, .random:selected {-fx-background-image:url("../icons/random.png"); 
+                           -fx-background-repeat: no-repeat;
+                           -fx-background-position: center;
+                           -fx-background-size: 30px;
+                           -fx-pref-width: 30; 
+                           -fx-pref-height: 30;
+                           -fx-cursor: hand;}
+.random:hover, .random:pressed {-fx-background-image:url("../icons/random_active.png");}
+.random-active {-fx-background-image:url("../icons/random_active.png"); 
+                -fx-background-repeat: no-repeat;
+                -fx-background-position: center;
+                -fx-background-size: 30px;
+                -fx-pref-width: 30; 
+                -fx-pref-height: 30;
+                -fx-cursor: hand;}

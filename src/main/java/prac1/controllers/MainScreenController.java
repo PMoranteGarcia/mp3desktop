@@ -148,6 +148,7 @@ public class MainScreenController implements Initializable {
         currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
         
         playBtn.getStyleClass().add("play");                                    // Assigno classe CSS per mostrar icona PLAY
+        randomSong.getStyleClass().add("random");                               // Assigno classe CSS per mostrar icona RANDOM
 
     }
 
@@ -313,7 +314,7 @@ public class MainScreenController implements Initializable {
                         media = new Media(song.getPath());                      
                         mediaPlayer = new MediaPlayer(media);
                         currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                        playBtn.getStyleClass().clear();                        // Netejo classe CSS per assignar-lu una de nova 
+                        playBtn.getStyleClass().clear();                        // Netejo classe CSS per assignar-li una de nova 
                         playBtn.getStyleClass().add("pause");                   // Assigno classe CSS per mostrar icona PAUSE                        
                         playBtn.setTooltip(pauseTooltip);
                         beginTimer();                                           
@@ -551,6 +552,8 @@ public class MainScreenController implements Initializable {
                 int temp = rand.nextInt(songObservableList.size() - i) + i;
                 Collections.swap(songObservableList, i, temp);
                 random = true;
+                randomSong.getStyleClass().clear();                             // Netejo classe CSS per assignar-li una de nova 
+                randomSong.getStyleClass().add("random-active");                // Assigno classe CSS per mostrar icona PAUSE 
             }
             if(running) stopSong();
             running = false;
@@ -563,10 +566,10 @@ public class MainScreenController implements Initializable {
             random = false;
             stopSong();
             running = false;
+            randomSong.getStyleClass().clear();                                 // Netejo classe CSS per assignar-li una de nova 
+            randomSong.getStyleClass().add("random");                           // Assigno classe CSS per mostrar icona PAUSE;
             playSong();
-        }
-
-        
+        }        
     }
 
     /**
