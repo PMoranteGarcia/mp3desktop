@@ -470,6 +470,7 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("CANCEL");
         }
+        refreshVolume();
     }
 
     @FXML
@@ -520,9 +521,16 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("CANCEL");
         }
+        refreshVolume();
 
     }
 
+        private void refreshVolume() {
+        double i = volumeSlider.getValue();
+        volumeSlider.setValue(0);
+        volumeSlider.setValue(i);
+    }
+    
     @FXML
     private Button fwdBtn;
     Tooltip fwdTooltip = new Tooltip("Avançar 10 seg.");
