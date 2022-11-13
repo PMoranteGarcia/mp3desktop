@@ -553,7 +553,7 @@ public class MainScreenController implements Initializable {
                 random = true;
             }
             if(running) stopSong();
-            running = false;
+            running = false;                                                    
             playSong();
             randomSong.setDisable(false);
         } else {                                                                //Per tornar a la llista original ordenem la llista de reproducció pel seu títol
