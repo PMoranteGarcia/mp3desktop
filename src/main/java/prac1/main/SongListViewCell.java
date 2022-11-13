@@ -71,6 +71,9 @@ public class SongListViewCell extends ListCell<Song> {
      * @param empty Boleà per determinar si hi ha contingut o no dins la fila
      *
      * @author Txell Llanas
+     * @author Pablo Morante
+     * @author Izan Jimenez
+     * @author Víctor García
      */
     @Override
     protected void updateItem(Song song, boolean empty) {
