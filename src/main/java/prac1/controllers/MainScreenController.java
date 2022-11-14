@@ -7,6 +7,9 @@ package prac1.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,6 +17,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -42,27 +46,27 @@ import prac1.main.SongListViewCell;
  * @author GrupD
  * @author Txell Llanas
  * @author Izan Jimenez
+ * @author Victor García
+ * @author Pablo Morante
  */
 public class MainScreenController implements Initializable {
 
-    private final FileChooser fileChooser = new FileChooser();                  // obrir fitxers
+    private final FileChooser fileChooser = new FileChooser();                  // Obrir fitxers
     private final long MAX_FILE_SIZE = (20480L * 1024L);                        // 20.971.520 Bytes = 20MB 
-    private Song song = null;                                                   // variable per reproduir
+    private Song song = null;                                                   // Variable per reproduir
 
     //classes per reproduir media(mp3 en aquest cas)
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private int songNumber = 0;                                                // index de numero de la llista de cançons
-
-    public void setSongNumber(int index) {
-        songNumber = index;
-    }
+    private int songNumber = 0;                                                 // Índex numèric de la llista de cançons
 
     //control del temps de la cançó
     private Timer timer;
     private TimerTask task;
     private boolean running;
+
+    private boolean random = false;
 
     @FXML
     private Text actualTime;
@@ -79,20 +83,20 @@ public class MainScreenController implements Initializable {
     @FXML
     private Slider volumeSlider;
 
+    @FXML
+    private Label TempsTotalLlista;
+
     private final ObservableList<Song> songObservableList = FXCollections.observableArrayList();
 
-    public ObservableList<Song> getSongObservableList() {
-        return songObservableList;
-    }
-
     /**
-     * *
      * Inicialitza el controlador
      *
      * @param url The location used to resolve relative paths for the root
      * object, or null if the location is not known.
      * @param rb The resources used to localize the root object, or null if the
      * root object was not localized.
+     *
+     * @author GrupD
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -112,24 +116,16 @@ public class MainScreenController implements Initializable {
         Label placeholder = new Label("Afegeix una cançó.");                    // Especifico un texte d'ajuda per quan el llistat està buit
         listView.setPlaceholder(placeholder);
 
-        listView.setItems(songObservableList);                                  // Actualitzo el llistat amb els elements disponibles (openFile())      
-        //lambda:  listView.setCellFactory(songListView -> new SongListViewCell());        
+        listView.setItems(songObservableList);                                  // Actualitzo el llistat amb els elements disponibles (openFile())             
         listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>() {// Carrego un layout a cada fila del llistat, on carregar-hi les dades de la cançó afegida
             @Override
             public ListCell<Song> call(ListView<Song> songListView) {
                 return new SongListViewCell();
             }
         });
-        listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    //fem la llista de cancons adaptabele al monitor de la pantalla
+        listView.setPrefHeight(Screen.getPrimary().getBounds().getHeight());    // Fem la llista de cancons adaptabele al monitor de la pantalla
         sliderBar.setPrefWidth(Screen.getPrimary().getBounds().getHeight());
 
-//        sliderBar.valueProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-//
-//                //mediaPlayer.seek(javafx.util.Duration.seconds(sliderBar.getValue()));
-//            }
-//        });
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
@@ -142,6 +138,9 @@ public class MainScreenController implements Initializable {
 
         currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
         currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
+        
+        playBtn.getStyleClass().add("play");                                    // Assigno classe CSS per mostrar icona PLAY
+        randomSong.getStyleClass().add("random");                               // Assigno classe CSS per mostrar icona RANDOM
 
     }
 
@@ -164,13 +163,11 @@ public class MainScreenController implements Initializable {
             song = new Song(file);                                              // Crear nou objecte de tipus cançó
             song.setPath(file);
             listView.refresh();
-            System.out.println("song: " + listView.getItems().size());
-
             if (file.canRead()) {                                               //  Filtre 1: Si l'arxiu existeix i té permissos de lectura...
 
                 fileChooser.setInitialDirectory(file.getParentFile());          // Si s'ha obert un arxiu prèviament, recorda/obre l'últim directori visitat
 
-                String index = String.format("%02d", listView.getItems().size());  // Genero un índex de 2 dígits per a cada element a llistar
+                String index = String.format("%02d", listView.getItems().size()); // Genero un índex de 2 dígits per a cada element a llistar
                 song.setIndex(index);
 
                 long fileSize = file.length();
@@ -182,6 +179,8 @@ public class MainScreenController implements Initializable {
 
                             songObservableList.add(song);
                             listView.setItems(songObservableList);
+                            String totalDuration = getPlaylistDuration(songObservableList);
+                            TempsTotalLlista.setText("Temps total: " + totalDuration);
                         } else {
                             throw new DuplicatedItemException("Són elements duplicats!");
                         }
@@ -260,82 +259,84 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button playBtn;
     Tooltip playTooltip = new Tooltip("Reproduir cançó");
+    Tooltip pauseTooltip = new Tooltip("Pausar cançó");
 
     @FXML
     private Label currentSongTitle;
 
-    public void play() {
-        playSong();
-    }
-
-    @FXML
-    private void playSong() {
-
-        try {
-            if (openBtn.isDisabled()) {
-                openBtn.setDisable(true);
-            }
-            if (!songObservableList.isEmpty()) {
-                if (mediaPlayer != null) {
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    System.out.println("currentSongTitle (playSong()): " + currentSongTitle);
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                } else {
-                    song = songObservableList.get(songNumber);
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-
-                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
-                    beginTimer();
-                    mediaPlayer.play();
-                    running = true;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     /**
-     * (RF07): Métode per pausar la cançó Pausar la cançó tenint en compte que
-     * s'ha de gaurdar el mínut on es pausa amb el currentStatus sabem en quin
-     * moment es troba: si s'esta reproduint, la cançó es pausarà si està
-     * parada, la cançó continuara reproduint-se
+     * (RF01): Mètode per reproduir la llista de cançons des del principi,
+     * seleccionant un tema de la llista o després de fer nextSong(), prevSong()
+     * o pause.
+     * (RF07): Mètode per pausar la cançó tenint en compte que s'ha de guardar
+     * el minut on es pausa quan s'està reproduint
      *
+     * @author Víctor García
      * @author Pablo Morante
      */
     @FXML
-    private void pauseSong() {
-        try {
-            mediaPlayer.pause();
-
-            Status currentStatus = mediaPlayer.getStatus();
-
-            if (currentStatus == Status.PLAYING) {
-                openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
-                mediaPlayer.pause();
-//                playBtn.setDisable(true);
-//                pauseBtn.setText("Continue");
-
-                //playPauseImg.setImage(new Image(getClass() + "\\..\\..\\Other Sources\\src\\main\\resources\\icons\\play.png"));
-            } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {
-                openBtn.setDisable(true);
-                System.out.println("Player will start at: " + mediaPlayer.getCurrentTime());
-                mediaPlayer.play();
-//                playBtn.setDisable(false);
-            }
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Avís important");
-            alert.setHeaderText("La cançó no es pot pausar.");
-            alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
-                    + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
-            alert.show();
-            System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+    private void playSong() {
+        songNumber = listView.getSelectionModel().getSelectedIndex();
+        if (songNumber == -1) {
+            songNumber = 0;
         }
+        if (!running == true) {
+            try {
+                if (!songObservableList.isEmpty()) {                            //Si la llista de reproducció no es buida
+                    if (mediaPlayer != null) {                                  //Si mediaPlayer ja està inicialitzat
+                        stylePlayBtn("pause");
+                        controlPlay(true);                                 
+                    } else {                                                    //Si mediaPlayer no està inicialitzat
+                        song = songObservableList.get(songNumber);
+                        media = new Media(song.getPath());
+                        mediaPlayer = new MediaPlayer(media);
 
+                        stylePlayBtn("pause");
+                        controlPlay(true);
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);           //Mostra avís si la llista de reproducció no té cançons
+                    alert.setTitle("Avís");
+                    alert.setHeaderText("La cançó no es pot reproduir.");
+                    alert.setContentText("La llista de reproducció es buida.");
+                    alert.show();
+                    System.out.println("CANCEL");
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);               //Mostra avís si no es pot reproduir la llista
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot reproduir.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
+        } else {
+            try {
+                mediaPlayer.pause();                                            
+                Status currentStatus = mediaPlayer.getStatus();                 //Guardem l'estat del mediaPlayer
+                if (currentStatus == Status.PLAYING) {                          //Comprovem si s'està reproduint música
+                    stylePlayBtn("play");
+                    controlPlay(false);
+                } else if (currentStatus == Status.PAUSED || currentStatus == Status.STOPPED) {     //Comprovem si la música està pausada o aturada
+                    song = songObservableList.get(songNumber);
+                    media = new Media(song.getPath());
+                    mediaPlayer = new MediaPlayer(media);
+                    currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+
+                    stylePlayBtn("pause");
+                    controlPlay(true);                                         //Continuem la reproducció al punt on l'havíem aturat
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);               //Mostra avís si la cançó no es pot pausar
+                alert.setTitle("Avís important");
+                alert.setHeaderText("La cançó no es pot pausar.");
+                alert.setContentText("Comprova que la cançó no s'hagi esborrat, "
+                        + "canviat d'ubicació o renombrat: " + e.getLocalizedMessage());
+                alert.show();
+                System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
+            }
+        }
     }
 
     @FXML
@@ -343,15 +344,18 @@ public class MainScreenController implements Initializable {
     Tooltip stopTooltip = new Tooltip("Parar cançó");
 
     /**
-     * (RF07): Métode per aturar la cançó en aquest cas la cançó atura la
-     * reproducció sense guardar a quin minut es troba
+     * (RF07): Mètode per aturar la cançó. En aquest cas la cançó atura la
+     * reproducció sense guardar a quin minut es troba.
      *
      * @author Pablo Morante
      */
     @FXML
     private void stopSong() {
         try {
-            openBtn.setDisable(false);                                              // Habilita el botó d'afegir cançons
+            openBtn.setDisable(false);                                          // Habilita el botó d'afegir cançons
+            stylePlayBtn("play");
+            running = false;
+            listView.setDisable(false);
             mediaPlayer.stop();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -368,31 +372,28 @@ public class MainScreenController implements Initializable {
     private Button btnNextSong;
     Tooltip nextTooltip = new Tooltip("Cançó següent");
 
+    /**
+     * (RF09): Mètode per canviar a la següent cançó de la llista de
+     * reproducció.
+     *
+     * @author Izan Jimenez
+     */
     @FXML
     public void nextSong() {
-        System.out.println("####NextSong:");
-
         if (songObservableList.size() > 0) {
-            if (songNumber <= songObservableList.size() - 1) {                   //si no es la última cançó
+            if (songNumber < songObservableList.size() - 1) {                   //si no es la última cançó
 
                 songNumber++;
-                System.out.println("SongNumer: " + songNumber);
-                //mediaPlayer.stop();
+                mediaPlayer.stop();
                 if (running) {
                     cancelTimer();
                 }
-
-                System.out.println("Cançó reproduint:");
-                System.out.println(songObservableList.get(songNumber - 1).getTitle());
-
-                song = songObservableList.get(songNumber - 1);
+                song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
-
+                listView.getSelectionModel().select(songNumber);
                 playSong();
             } else {                                                            //si es la ultima
-                System.out.println("else");
-
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Avís");
                 alert.setContentText("No hi ha més cançons a la llista de reproducció");
@@ -406,41 +407,38 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("CANCEL");
         }
+        refreshVolume();
     }
 
     @FXML
     private Button btnPrevSong;
     Tooltip prevTooltip = new Tooltip("Cançó anterior");
 
+    /**
+     * (RF09): Mètode per canviar a la cançó anterior de la llista de
+     * reproducció.
+     *
+     * @author Izan Jimenez
+     */
     @FXML
     void prevSong() {
-        System.out.println("####PrevSong:");
-
         if (songObservableList.size() > 0) {
-            if (songNumber > 1) {                                               //si no es la última cançó
+            if (songNumber >= 1) {                                              //si no es la última cançó
 
                 songNumber--;
-                System.out.println("SongNumer: " + songNumber);
-
-                //mediaPlayer.stop();
+                mediaPlayer.stop();
                 if (running) {
                     cancelTimer();
                 }
-
-                System.out.println("Cançó reproduint:");
-                System.out.println(songObservableList.get(songNumber - 1).getTitle());
-
-                song = songObservableList.get(songNumber - 1);
+                song = songObservableList.get(songNumber);
                 media = new Media(song.getPath());
                 mediaPlayer = new MediaPlayer(media);
-
+                listView.getSelectionModel().select(songNumber);
                 playSong();
             } else {                                                            //si es la ultima
-                System.out.println("else");
-
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Avís");
-                alert.setContentText("No hi ha més cançons a la llistad de reproducció");
+                alert.setContentText("No hi ha més cançons a la llista de reproducció");
                 alert.show();
                 System.out.println("No hi ha més cançons");
             }
@@ -451,13 +449,30 @@ public class MainScreenController implements Initializable {
             alert.show();
             System.out.println("CANCEL");
         }
+        refreshVolume();
 
     }
 
+    /**
+     * Mètode que manté el nivell de volum actualitzat entre les cançons.
+     * 
+     * @author Izan Jimenez
+     */
+    private void refreshVolume() {
+    double i = volumeSlider.getValue();
+    volumeSlider.setValue(0);
+    volumeSlider.setValue(i);
+    }
+    
     @FXML
     private Button fwdBtn;
     Tooltip fwdTooltip = new Tooltip("Avançar 10 seg.");
 
+    /**
+     * (RF09): Durant la reproducció, ens permet avançar la cançó en blocs de 10 segons.
+     *
+     * @author Izan Jimenez
+     */
     @FXML
     void fwdTime() {
         if (mediaPlayer != null) {
@@ -469,6 +484,11 @@ public class MainScreenController implements Initializable {
     private Button rwdBtn;
     Tooltip rwdTooltip = new Tooltip("Retrocedir 10 seg.");
 
+    /**
+     * (RF09): Durant la reproducció, ens permet retrocedir la cançó en blocs de 10 segons.
+     *
+     * @author Izan Jimenez
+     */
     @FXML
     void rwdTime() {
         if (mediaPlayer != null) {
@@ -480,11 +500,52 @@ public class MainScreenController implements Initializable {
     private Button randomSong;
     Tooltip randomTooltip = new Tooltip("Reproducció aleatòria");
 
+    /**
+     * (FA01): Permet reproduir cançons en mode aleatori si el tenim seleccionat.
+     * Quan no està seleccionat es torna a la llista original.
+     *
+     * @author Víctor García
+     */
     @FXML
     void randomSong() {
-
+        if (random == false) {                                                  //Si seleccionem mode Random
+            for (int i = 0; i < songObservableList.size(); ++i) {               //Creem una llista de reproducció aleatòria
+                Random rand = new Random();
+                int temp = rand.nextInt(songObservableList.size() - i) + i;
+                Collections.swap(songObservableList, i, temp);
+                random = true;
+                randomSong.getStyleClass().clear();                             // Netejo classe CSS per assignar-li una de nova 
+                randomSong.getStyleClass().add("random-active");                // Assigno classe CSS per mostrar icona RANDOM ON
+            }
+            if(running) stopSong();
+            running = false;   
+            songNumber = 0;       
+            listView.getSelectionModel().select(songNumber);
+            listView.refresh();                                          
+            playSong();
+            randomSong.setDisable(false);
+        } else {                                                                //Per tornar a la llista original ordenem la llista de reproducció pel seu títol
+            Comparator<Song> songComparator = Comparator.comparing(Song::getTitle);
+            songObservableList.sort(songComparator);
+            SortedList<Song> sortedSongs = new SortedList<>(songObservableList, songComparator);
+            random = false;
+            stopSong();
+            running = false;
+            randomSong.getStyleClass().clear();                                 // Netejo classe CSS per assignar-li una de nova 
+            randomSong.getStyleClass().add("random");                           // Assigno classe CSS per mostrar icona RANDOM OFF;
+            stylePlayBtn("play");
+            songNumber = songObservableList.indexOf(song);
+            listView.getSelectionModel().select(songNumber);
+            listView.refresh();
+            playSong();
+        }        
     }
 
+    /**
+     * Inicialitza la barra de temps quan reproduïm música.
+     *
+     * @author Izan Jimenez
+     */
     public void beginTimer() {
 
         timer = new Timer();
@@ -499,14 +560,19 @@ public class MainScreenController implements Initializable {
                 sliderBar.setMajorTickUnit(end);
                 sliderBar.setValue((current / end) * 100);
 
-                songTime.setText(String.format("%02.0f:%02.0f", end / 60, end % 60));
-                actualTime.setText(String.format("%02.0f:%02.0f", current / 60, current % 60));
+                songTime.setText(String.format("%02.0f:%02.0f", Math.floor(end / 60), end % 60));
+                actualTime.setText(String.format("%02.0f:%02.0f", Math.floor(current / 60), current % 60));
             }
         };
 
         timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
+    /**
+     * Atura la barra de temps quan aturem la reproducció.
+     *
+     * @author Izan Jimenez
+     */
     public void cancelTimer() {
 
         running = false;
@@ -518,6 +584,10 @@ public class MainScreenController implements Initializable {
      * mètode comprova Song per Song si el títol es repeteix aixó fa que no
      * calgui una array abans creada 'títols'
      *
+     * @param songs llista amb totes les cançons actual
+     * @param nouTitol títol de la nova canço
+     * @return Boolean si el títol es repeteix o no
+     *
      * @author Pablo Morante
      */
     public boolean comprovarTitol(ObservableList<Song> songs, String nouTitol) {
@@ -525,43 +595,87 @@ public class MainScreenController implements Initializable {
             if (song.getTitle().equals(nouTitol)) {
                 return true;
             }
-
         }
         return false;
     }
 
-    public void playSongRow(Song song) {
-        
-        System.out.println("currentSongTitle: " + currentSongTitle);
-        currentSongTitle.maxWidth(currentSongTitle.getParent().getScaleX());
-        currentSongTitle.prefWidth(Screen.getPrimary().getBounds().getHeight());
+    /**
+     * (FA02): Càlcul de temps total de la llista de reproducció: s'envia la
+     * llista de cançons i es suma la duració de totes
+     *
+     * @param songs llista de cançons
+     * @return String duració total de la playlist
+     * @throws UnsupportedAudioFileException, IOException, NoDurationException
+     *
+     * @author Pablo Morante
+     */
+    public String getPlaylistDuration(ObservableList<Song> songs) throws UnsupportedAudioFileException, IOException, NoDurationException {
+        String totalDuration = "00:00";
+        int minutes = 0;
+        int seconds = 0;
+        int hours = 0;
+        for (Song song : songs) {
+            String duration = song.getDuration();
+            String[] parts = duration.split(":");
+            minutes = minutes + Integer.parseInt(parts[0]);
+            seconds = seconds + Integer.parseInt(parts[1]);
 
-        try {
+            int temp = seconds % 60;
+            minutes = minutes + (seconds / 60);
+            seconds = temp;
+            temp = minutes % 60;
+            hours = minutes / 60;
+            minutes = temp;
+        }
 
-            if (!song.getPath().isEmpty()) {
+        if (hours == 0) {
+            totalDuration = String.format("%02d:%02d", minutes, seconds);
+        } else {
+            totalDuration = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
 
-//                pauseBtn.setDisable(false);
-//                openBtn.setDisable(true);
-                if (mediaPlayer != null) {
-                    
-                    currentSongTitle.setText(song.getTitle());
-                    mediaPlayer.play();
-                    running = true;
-                    //beginTimer();
-                } else {
+        return totalDuration;
+    }
 
-                    media = new Media(song.getPath());
-                    mediaPlayer = new MediaPlayer(media);
-                    
-                    currentSongTitle.setText(song.getTitle());
-                    mediaPlayer.play();
-                    running = true;
-                    //beginTimer();
-                }
+    /**
+     * Mètode per simplificar codi que es repeteix: start/stop una cançó
+     *
+     * @param accio Booleà per saber si es vol començar a reproduir o pausar
+     *
+     * @author Pablo Morante
+     * @author Victor Garcia
+     */
+    public void controlPlay(Boolean accio) {
+        if (!openBtn.isDisabled()) {                            //Comprovem si el botó per afegir cançons està activat
+            openBtn.setDisable(accio);                           //Desactivem el botó per afegir cançons
+        }
+        listView.refresh();
+        listView.getSelectionModel().select(songNumber);
 
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+        currentSongTitle.setText(songObservableList.get(songNumber).getTitle());
+        beginTimer();
+        if (accio) {
+            mediaPlayer.play();
+        }
+        listView.setDisable(accio);                              //Desactivem la llista mentre reproduïm música per no tenir accés
+        running = accio;
+    }
+
+    /**
+     * Mètode per simplificar codi que es repeteix: canviar estils del botó play/pause
+     *
+     * @param accio String per saber si el botò ha de ser per reproduir o parar
+     *
+     * @author Pablo Morante
+     * @author Victor Garcia
+     */
+    public void stylePlayBtn(String accio) {
+        playBtn.getStyleClass().clear();                                    // Netejo classe CSS per assignar-li una de nova 
+        playBtn.getStyleClass().add(accio);                                // Assigno classe CSS per mostrar icona PLAY
+        if (accio.equals("play")) {
+            playBtn.setTooltip(playTooltip);
+        } else {
+            playBtn.setTooltip(stopTooltip);
         }
     }
 }

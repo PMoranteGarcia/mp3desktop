@@ -26,11 +26,20 @@
                     <children>
                         <FlowPane id="bg-list-title" alignment="CENTER_LEFT" prefWrapLength="550.0" styleClass="round-corners">
                             <children>
-                                <Label id="list-title" ellipsisString="" styleClass="txt-white" text="Llista de Reproducció">
-                                    <font>
-                                        <Font size="24.0" />
-                                    </font>
-                                </Label>
+                        <HBox alignment="CENTER">
+                           <children>
+                                      <Label id="list-title" ellipsisString="" styleClass="txt-white" text="Llista de Reproducció">
+                                          <font>
+                                              <Font size="24.0" />
+                                          </font>
+                                      </Label>
+                              <Label fx:id="TempsTotalLlista" alignment="CENTER" prefHeight="25.0" prefWidth="244.0" text="Temps total: 00:00" textAlignment="CENTER" textFill="#c1c1c1">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
                             </children>
                         </FlowPane>
                         <FlowPane alignment="CENTER" columnHalignment="CENTER" prefWrapLength="150.0">

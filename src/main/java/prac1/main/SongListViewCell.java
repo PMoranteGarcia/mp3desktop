@@ -5,8 +5,10 @@
 package prac1.main;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,7 +21,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.stage.Screen;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import prac1.Model.Song;
 import prac1.controllers.MainScreenController;
@@ -36,9 +37,6 @@ public class SongListViewCell extends ListCell<Song> {
     @FXML
     private HBox rowLayoutContainer;
 
-    //@FXML
-    //private Button playRowBtn;
-
     @FXML
     private Label indexLabel;
 
@@ -51,7 +49,7 @@ public class SongListViewCell extends ListCell<Song> {
 
     @FXML
     private Label durationLabel;
-    
+
     @FXML
     private Button dwnRowBtn;
 
@@ -61,7 +59,6 @@ public class SongListViewCell extends ListCell<Song> {
     private FXMLLoader fxmlLoader;
     private MainScreenController row = null;
 
-    
     public SongListViewCell() {
 
     }
@@ -73,7 +70,11 @@ public class SongListViewCell extends ListCell<Song> {
      * @param song Arxiu d'àudio carregat al llistat
      * @param empty Boleà per determinar si hi ha contingut o no dins la fila
      *
+     * @author GrupD
      * @author Txell Llanas
+     * @author Pablo Morante
+     * @author Izan Jimenez
+     * @author Víctor García
      */
     @Override
     protected void updateItem(Song song, boolean empty) {
@@ -100,27 +101,24 @@ public class SongListViewCell extends ListCell<Song> {
                 }
 
             }
-            
+
             int index = Integer.parseInt(song.getIndex()) + 1;
-            if(index <= 9)                                                      // Assigno un índex a la cançó
+            if (index <= 9) // Assigno un índex a la cançó
+            {
                 indexLabel.setText(String.valueOf("0" + index + ". "));
-            else
+            } else {
                 indexLabel.setText(String.valueOf(index + ". "));
-            
-            System.out.println("ID: " + indexLabel);
+            }
 
             titleLabel.setMinWidth(200);
             indexLabel.setStyle("-fx-font-size:28px;");
-            // Ízan, això em surt marcat amb un error, per això ho comento. No sé què li passa... (Txell)
-            //titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
-            
+
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
-            System.out.println("NOM: " + song.getTitle());
 
             try {
 
                 durationLabel.setText(String.valueOf(song.getDuration()));      // Insereixo la duració de la cançó a l'etiqueta 'durationLabel'
-                durationLabel.setMinWidth(70);
+                durationLabel.setMinWidth(90);
             } catch (UnsupportedAudioFileException | IOException | NoDurationException ex) {
                 Logger.getLogger(SongListViewCell.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -141,36 +139,49 @@ public class SongListViewCell extends ListCell<Song> {
                 System.out.println("Arxiu no trobat, Exception: " + e.getMessage());
             }
 
-            /*playRowBtn.setOnAction(new EventHandler<ActionEvent>(){
+            dwnRowBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    //String path = getListView().getItems().get(getItem().getPath());
-                    System.out.println(getListView().getItems());
-                    Song song = getListView().getItems().get(Integer.parseInt(getItem().getIndex()));
-                    row = new MainScreenController();
-                    row.playSongRow(song);
-                }
-            });*/
-            
-            dwnRowBtn.setOnAction(new EventHandler<ActionEvent>(){
-                @Override
-                public void handle(ActionEvent event) {
-//                    int currentIndex = getListView().getSelectionModel().getSelectedIndex();
-//                    System.out.println(currentIndex);
-//                    System.out.println(getListView().getSelectionModel().getSelectedItem());
-                    //Song song = getListView().getSelectionModel().select(currentIndex);
+                    ObservableList<Song> items = getListView().getItems();
+                    int currentIndex = getListView().getSelectionModel().getSelectedIndex();
+                    if (currentIndex == items.size() - 1) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Avís important");
+                        alert.setHeaderText("La cançó no es pot moure.");
+                        alert.setContentText("No es pot moure més cap a abaix, "
+                                + "s'ha arribat al final de la llista.");
+                        alert.show();
+                    } else {
+                        Collections.swap(items, currentIndex, currentIndex + 1);
+                        items.get(currentIndex).setIndex(String.valueOf(currentIndex));
+                        items.get(currentIndex+1).setIndex(String.valueOf(currentIndex+1));
+                        getListView().getSelectionModel().select(currentIndex+1);
+                        getListView().refresh();
+                    }
                 }
             });
-            
-//            deleteRowBtn.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                //row = new MainScreenController();
-//                //row.deleteSong(1);
-//                System.out.println("clicat");
-//                System.out.println("index: " + row.getSongObservableList().get(0));
-//            }
-//        });
+
+            upRowBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    ObservableList<Song> items = getListView().getItems();
+                    int currentIndex = getListView().getSelectionModel().getSelectedIndex();
+                    if (currentIndex == 0) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Avís important");
+                        alert.setHeaderText("La cançó no es pot moure.");
+                        alert.setContentText("No es pot moure més cap a adalt, "
+                                + "s'ha arribat al principi de la llista.");
+                        alert.show();
+                    } else {
+                        Collections.swap(items, currentIndex, currentIndex - 1);
+                        items.get(currentIndex).setIndex(String.valueOf(currentIndex));
+                        items.get(currentIndex-1).setIndex(String.valueOf(currentIndex-1));
+                        getListView().getSelectionModel().select(currentIndex-1);
+                        getListView().refresh();
+                    }
+                }
+            });
         }
     }
 

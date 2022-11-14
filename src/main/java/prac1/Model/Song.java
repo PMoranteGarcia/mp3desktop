@@ -11,10 +11,10 @@ import java.util.Map;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import prac1.utils.IdentificaOS;
 
 /**
- *
+ * Classe que serveix per gestionar un arxiu d'àudio (cançó en format *.mp3)
+ * 
  * @author GrupD
  * @author Txell Llanas
  */
@@ -28,45 +28,67 @@ public class Song {
      private String path;
 
 
-    public Song(File file) {
+    /**
+     * Constructor que serveix per crear un objecte de tipus cançó
+     * 
+     * @param file Arxiu que defineix la ubicació de la cançó
+     * 
+     * @author Txell Llanas
+     */
+     public Song(File file) {
         this.file = file;
     }
   
-    public String getPath() {      
+    /**
+     * Mètode que permet obtenir la ruta de la cançó
+     * 
+     * @return String amb la ruta de la cançó actual
+     * 
+     * @author Txell Llanas
+     */
+     public String getPath() {      
         return path;
     }
 
+     /**
+     * Mètode que permet definir la ruta de la cançó
+     * 
+     * @param File per definir la ruta de la cançó actual
+     * 
+     * @author Txell Llanas
+     */
     public void setPath(File file) {
         path = file.toURI().toString();
-        this.path = normalizeURLFormat(path);
+        this.path = path;
     }
         
+    /**
+     * Mètode que permet obtenir l'índex al llistat de la cançó
+     * 
+     * @return String amb l'índex de la cançó actual
+     * 
+     * @author Txell Llanas
+     */
     public String getIndex() {
         return index;
     }
 
+    /**
+     * Mètode que permet definir l'índex de la cançó
+     *
+     * @param String per definir un índex
+     * 
+     * @author Txell Llanas
+     */
     public void setIndex(String index) {
         this.index = index;
-    }
-    
-    /***
-     * Si la URL és basura de tipus Windows, elimina el nom de la unitat
-     * @return 
-     */
-    public static String normalizeURLFormat(String url)
-    {
-        String ret = "";
-        
-        if (IdentificaOS.getOS() == IdentificaOS.TipusOS.WIN)
-            ret = url.replace("[A-Z]{1}:", "");
-        
-        return ret;
     }
 
     
     /**
      * Mostra el nom de la cançó seleccionada
-     * @return Mostra el nom de l'arxiu (Títol de la cançó)
+     * 
+     * @return Retorna un String amb el nom de l'arxiu (Títol de la cançó)
      * 
      * @author Txell Llanas
      */
@@ -78,7 +100,8 @@ public class Song {
 
     /**
      * Mostra la duració total de la cançó seleccionada amb el format mm:ss
-     * @return
+     * @return Retorna un String amb la duració del fitxer d'àudio actual
+     * 
      * @throws javax.sound.sampled.UnsupportedAudioFileException
      * @throws java.io.IOException
      * @throws prac1.exceptions.NoDurationException

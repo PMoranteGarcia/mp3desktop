@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox id="song-layout" fx:id="rowLayoutContainer" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<HBox id="song-layout" fx:id="rowLayoutContainer" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button id="playRow" fx:id="upRowBtn1" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" textAlignment="CENTER" />
       <HBox alignment="CENTER" maxWidth="800.0" prefWidth="300.0" HBox.hgrow="NEVER">
@@ -19,7 +24,7 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Label id="txt_Title" fx:id="titleLabel" ellipsisString="" prefWidth="200.0" text="Title">
+            <Label id="txt_Title" fx:id="titleLabel" prefWidth="200.0" text="Title">
                <font>
                   <Font size="24.0" />
                </font>
