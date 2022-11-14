@@ -110,15 +110,10 @@ public class SongListViewCell extends ListCell<Song> {
                 indexLabel.setText(String.valueOf(index + ". "));
             }
 
-            System.out.println("ID: " + indexLabel);
-
             titleLabel.setMinWidth(200);
             indexLabel.setStyle("-fx-font-size:28px;");
-            // Ízan, això em surt marcat amb un error, per això ho comento. No sé què li passa... (Txell)
-            //titleLabel.setPrefWidth(Screen.getPrimary().getBounds().getHeight());// Prioritat de tamany del titol de la cançó per adaptarla a la finestra
 
             titleLabel.setText(String.valueOf(song.getTitle()));                // Insereixo el títol de la cançó a l'etiqueta 'indexLabel'
-            System.out.println("NOM: " + song.getTitle());
 
             try {
 
